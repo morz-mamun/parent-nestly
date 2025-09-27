@@ -96,7 +96,7 @@ export function HomeBanner() {
                 {"Trending insights & stories"}
               </div>
 
-              <h1 className="text-5xl lg:text-7xl font-bold leading-tight">
+              <h1 className="text-3xl lg:text-6xl font-bold leading-tight">
                 <span className="text-foreground">Discover Ideas That</span>{" "}
                 <span className="text-primary">Inspire</span>
               </h1>
