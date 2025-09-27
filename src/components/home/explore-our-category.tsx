@@ -61,7 +61,7 @@ const categories = [
 ];
 export default function ExploreOurCategory() {
   return (
-    <section className="mt-36 max-w-screen-xl mx-auto">
+    <section className="my-36 max-w-screen-xl mx-auto">
       <div className="space-y-12">
         <div className="max-w-2xl mx-auto text-center space-y-5">
           <h2 className="text-4xl lg:text-5xl font-bold text-balance">
@@ -123,8 +123,12 @@ export default function ExploreOurCategory() {
           })}
         </div>
 
-        <div className="text-center pt-8">
-          <Button size="lg" variant="outline" className="group bg-transparent">
+        <div className="text-right">
+          <Button
+            size="lg"
+            variant="outline"
+            className="cursor-pointer group bg-transparent"
+          >
             View All Categories
             <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Button>
