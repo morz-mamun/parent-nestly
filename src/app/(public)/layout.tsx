@@ -1,3 +1,4 @@
+import Footer from "@/components/shared/footer";
 import { WebSiteNavbar } from "@/components/shared/navbar";
 
 export default function PublicLayout({
@@ -12,7 +13,7 @@ export default function PublicLayout({
       {/* <ScrollProgress /> */}
       <div className="mx-3 md:mx-6">{children}</div>
       {/* FOOTER */}
-      {/* <Footer /> */}
+      <Footer />
     </main>
   );
 }
