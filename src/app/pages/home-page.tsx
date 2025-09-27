@@ -1,3 +1,4 @@
+import AboutUs from "@/components/home/about-us";
 import ExploreOurCategory from "@/components/home/explore-our-category";
 import { HomeBanner } from "@/components/home/home-banner";
 import LatestArticles from "@/components/home/latest-articles";
@@ -11,6 +12,7 @@ export default function HomePage() {
       <ExploreOurCategory />
       <LatestArticles />
       <TopProducts />
+      <AboutUs />
     </main>
   );
 }
