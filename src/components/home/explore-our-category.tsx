@@ -64,6 +64,10 @@ export default function ExploreOurCategory() {
     <section className="my-36 max-w-screen-xl mx-auto">
       <div className="space-y-12">
         <div className="max-w-2xl mx-auto text-center space-y-5">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium">
+            <Globe className="w-4 h-4" />
+            Find Your Interests
+          </div>
           <h2 className="text-4xl lg:text-5xl font-bold text-balance">
             <span className="text-foreground">Explore Our</span>{" "}
             <span className="text-primary">Categories</span>

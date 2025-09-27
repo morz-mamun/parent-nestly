@@ -44,59 +44,21 @@ const latestArticles = [
     categoryColor: "bg-green-500/10 text-green-600",
     image: "/ai-artificial-intelligence-technology.jpg",
   },
-  {
-    id: 4,
-    title: "The Psychology of Color in Digital Marketing",
-    excerpt:
-      "Discover how color psychology influences user behavior and learn to choose the perfect palette for your brand.",
-    author: "David Kim",
-    publishDate: "1 week ago",
-    readTime: "7 min read",
-    views: "5.1K",
-    comments: "82",
-    category: "Marketing",
-    categoryColor: "bg-orange-500/10 text-orange-600",
-    image: "/remote-team-collaboration-workspace.jpg",
-  },
-  {
-    id: 5,
-    title: "Mastering React Server Components: A Complete Guide",
-    excerpt:
-      "Deep dive into React Server Components and learn how to build faster, more efficient web applications.",
-    author: "Alex Thompson",
-    publishDate: "2 weeks ago",
-    readTime: "12 min read",
-    views: "6.7K",
-    comments: "94",
-    category: "Development",
-    categoryColor: "bg-indigo-500/10 text-indigo-600",
-    image: "/ai-artificial-intelligence-technology.jpg",
-  },
-  {
-    id: 6,
-    title: "Mindful Leadership in the Digital Age",
-    excerpt:
-      "Explore how mindfulness practices can transform leadership styles and improve team performance in tech companies.",
-    author: "Lisa Park",
-    publishDate: "2 weeks ago",
-    readTime: "9 min read",
-    views: "3.4K",
-    comments: "56",
-    category: "Leadership",
-    categoryColor: "bg-teal-500/10 text-teal-600",
-    image: "/remote-team-collaboration-workspace.jpg",
-  },
 ];
 export default function LatestArticles() {
   return (
     <section className="max-w-screen-xl mx-auto">
       <div className="space-y-12">
         <div className="max-w-2xl mx-auto text-center space-y-5">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium">
+            <Clock className="w-4 h-4" />
+            Trending Now
+          </div>
           <h2 className="text-4xl lg:text-5xl font-bold text-balance">
             <span className="text-foreground">Latest</span>{" "}
             <span className="text-primary">Articles</span>
           </h2>
-          <p className="max-w-xl mx-auto text-lg text-muted-foreground text-pretty">
+          <p className="max-w-lg mx-auto text-lg text-muted-foreground text-pretty">
             Stay up-to-date with our freshest insights, expert analysis, and
             trending topics that are shaping the industry today.
           </p>
