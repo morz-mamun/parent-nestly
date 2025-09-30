@@ -1,30 +1,39 @@
 "use client";
 
-import type React from "react";
-
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle } from "lucide-react";
 
+type FormData = {
+  email: string;
+};
+
 export function NewsletterForm() {
-  const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<FormData>({
+    defaultValues: { email: "" },
+  });
 
+  const onSubmit = async (data: FormData) => {
     setIsLoading(true);
+    console.log("Form Data Submitted:", data);
 
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     setIsSubmitted(true);
     setIsLoading(false);
-    setEmail("");
+    reset(); // reset form after success
   };
 
   if (isSubmitted) {
@@ -66,19 +75,24 @@ export function NewsletterForm() {
           Get parenting tips and product updates
         </p>
       </div>
-      <form onSubmit={handleSubmit} className="space-y-4">
+
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="relative">
           <Input
             type="email"
             placeholder="Enter your email address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
             className="pr-24 h-12 bg-background/50 border-border/50 focus:border-primary/50 focus:ring-primary/20"
-            required
+            {...register("email", {
+              required: "Email is required",
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: "Enter a valid email address",
+              },
+            })}
           />
           <Button
             type="submit"
-            disabled={isLoading || !email}
+            disabled={isLoading}
             className="absolute right-1 top-1 h-10 px-4 bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
           >
             {isLoading ? (
@@ -91,6 +105,11 @@ export function NewsletterForm() {
             )}
           </Button>
         </div>
+
+        {errors.email && (
+          <p className="text-sm text-red-500 mt-1">{errors.email.message}</p>
+        )}
+
         <p className="text-sm text-muted-foreground leading-relaxed">
           By subscribing, you agree to receive our newsletter and promotional
           emails. You can unsubscribe at any time.
