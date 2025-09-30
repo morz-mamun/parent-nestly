@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-import { CheckCircle, Mail, Sparkles } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 
 export function NewsletterForm() {
   const [email, setEmail] = useState("");
