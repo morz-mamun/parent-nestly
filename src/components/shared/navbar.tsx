@@ -7,7 +7,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-
 import { Triangle, Menu, Search } from "lucide-react";
 import Link from "next/link";
 
@@ -45,7 +44,7 @@ export function WebSiteNavbar() {
             <input
               type="text"
               placeholder="Search..."
-              className="w-full pl-8 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition"
+              className="w-full pl-8 py-2 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition"
             />
             <Search
               size={20}
@@ -95,7 +94,7 @@ export function WebSiteNavbar() {
               </div>
 
               {/* Fully modern search bar */}
-              <div className="relative flex lg:hidden w-full">
+              <div className="relative w-full">
                 <input
                   type="text"
                   placeholder="Search..."
