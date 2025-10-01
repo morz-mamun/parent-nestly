@@ -8,7 +8,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-import { Triangle, Menu } from "lucide-react";
+import { Triangle, Menu, Search } from "lucide-react";
 import Link from "next/link";
 
 export function WebSiteNavbar() {
@@ -26,10 +26,10 @@ export function WebSiteNavbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-8">
-            {navItems.map((item) => (
+            {navItems?.map((item) => (
               <Link
-                key={item.name}
-                href={item.link}
+                key={item?.name}
+                href={item?.link}
                 className="relative hover:text-primary transition-colors duration-200 group"
               >
                 {item.name}
@@ -39,8 +39,23 @@ export function WebSiteNavbar() {
           </div>
         </div>
 
+        {/* Fully modern search bar */}
+        <div className="relative hidden lg:flex mx-10">
+          <div className="w-fit">
+            <input
+              type="text"
+              placeholder="Search..."
+              className="w-full pl-8 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition"
+            />
+            <Search
+              size={20}
+              className="absolute left-2 top-1/2 transform -translate-y-1/2 text-muted-foreground"
+            />
+          </div>
+        </div>
+
         {/* Desktop Auth Buttons */}
-        <div className="hidden lg:flex items-center gap-3">
+        {/* <div className="hidden lg:flex items-center gap-3">
           <Button
             variant="ghost"
             className="text-muted-foreground hover:text-foreground transition-colors duration-200"
@@ -50,7 +65,7 @@ export function WebSiteNavbar() {
           <Button className="shadow-sm hover:shadow-md transition-shadow duration-200">
             Login
           </Button>
-        </div>
+        </div> */}
 
         {/* Mobile Menu (Popover) */}
         <div className="lg:hidden">
@@ -79,13 +94,22 @@ export function WebSiteNavbar() {
                 ))}
               </div>
 
+              {/* Fully modern search bar */}
+              <div className="relative flex lg:hidden w-full">
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition"
+                />
+                <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+              </div>
               {/* Mobile Auth Buttons */}
-              <div className="flex flex-col gap-3 pt-4 border-t border-border">
+              {/* <div className="flex flex-col gap-3 pt-4 border-t border-border">
                 <Button variant="outline" className="w-full bg-transparent">
                   Sign Up
                 </Button>
                 <Button className="w-full">Login</Button>
-              </div>
+              </div> */}
             </PopoverContent>
           </Popover>
         </div>

@@ -1,22 +1,18 @@
 export const navItems = [
   {
     name: "Product Reviews",
-    link: "#features",
+    link: "#product-reviews",
   },
   {
     name: "Buying Guides",
-    link: "#pricing",
+    link: "#buying-guides",
   },
   {
     name: "Parenting Tips",
-    link: "#contact",
+    link: "#parenting-tips",
   },
   {
     name: "Baby Care",
-    link: "#contact",
-  },
-  {
-    name: "About",
-    link: "#contact",
+    link: "#baby-care",
   },
 ];
