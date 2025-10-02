@@ -22,20 +22,43 @@ export async function POST(request: NextRequest) {
   try {
     await connectDB();
     const body = await request.json();
-    console.log("body:", body);
-    const { title, image, content } = body;
+    console.log(body);
 
-    if (!title || !content) {
+    const {
+      title,
+      image,
+      content,
+      status,
+      author,
+      primaryKeyword,
+      metaTitle,
+      metaDescription,
+      slug,
+      publishDate,
+    } = body;
+
+    if (!title || !content || !image) {
       return NextResponse.json(
-        { success: false, error: "Title and content are required" },
+        { success: false, error: "Title, content, and image are required" },
         { status: 400 },
       );
     }
 
-    const post = await BlogPost.create(body);
+    const post = await BlogPost.create({
+      title,
+      image,
+      content,
+      status: status || "draft",
+      author,
+      primaryKeyword,
+      metaTitle,
+      metaDescription,
+      slug,
+      publishDate,
+    });
     return NextResponse.json({ success: true, data: post }, { status: 201 });
   } catch (error) {
-    console.error("[v0] Error creating post:", error);
+    console.error("Error creating post:", error);
     return NextResponse.json(
       { success: false, error: "Failed to create post" },
       { status: 500 },

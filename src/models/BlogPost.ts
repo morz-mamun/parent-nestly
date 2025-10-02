@@ -10,6 +10,7 @@ export interface IBlogPost extends Document {
   slug: string;
   content: string;
   status: "draft" | "published";
+  publishDate: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -60,6 +61,10 @@ const BlogPostSchema: Schema = new Schema(
       type: String,
       enum: ["draft", "published"],
       default: "draft",
+    },
+    publishDate: {
+      type: String,
+      required: false,
     },
   },
   {

@@ -130,7 +130,7 @@ export default function Blogs() {
       { method: "POST", body: formData },
     );
     const data = await res.json();
-    console.log(data);
+    console.log("ImgBB response:", data);
 
     const imageUrl = data.data.url;
 
@@ -147,20 +147,23 @@ export default function Blogs() {
     setUploadUrl(null);
     setValue("image", ""); // reset form value
   };
-  // Submit handler
+  // Submit blog post function
   const onSubmit = async (data: FormValues) => {
     console.log("blog blog data:", data);
 
     if (!data.title || !data.image || !data.content) {
-      toast("Required fields missing", {
-        description: "Please fill in all required fields",
-      });
+      toast(
+        `${data.title ? "" : "Title"} ${data.image ? "" : "Image"} ${data.content ? "" : "Content"} is required`,
+        {
+          description: "Please fill in all required fields",
+        },
+      );
       return;
     }
 
     try {
       if (editingId) {
-        const res = await fetch(`http://localhost:5000/news/${editingId}`, {
+        const res = await fetch(`/api/blogs/${editingId}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -222,7 +225,7 @@ export default function Blogs() {
 
   const handleDelete = async (id: string) => {
     try {
-      const res = await fetch(`http://localhost:5000/news/${id}`, {
+      const res = await fetch(`/api/blogs/${id}`, {
         method: "DELETE",
       });
       if (res.ok) {
@@ -260,7 +263,13 @@ export default function Blogs() {
             </Link>
             <Button
               size="sm"
-              onClick={() => setIsCreating(true)}
+              onClick={() => {
+                setIsCreating(true);
+                setEditingId(null); // reset edit state
+                reset(); // reset form values
+                setPreviewImage(null); // clear preview image
+                localStorage.removeItem("blog-draft-new"); // clear draft
+              }}
               className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg"
             >
               <Plus className="h-4 w-4 mr-2" /> New blog

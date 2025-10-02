@@ -9,4 +9,5 @@ export type TBlog = {
   slug: string;
   content: string;
   status: "draft" | "published";
+  publishDate: string;
 };
