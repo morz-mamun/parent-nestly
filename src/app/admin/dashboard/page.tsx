@@ -1,4 +1,7 @@
 "use client";
+import { AnalyticsCharts } from "@/components/dashboard/analytics-charts";
+import { QuickActions } from "@/components/dashboard/quick-actions";
+import { RecentPosts } from "@/components/dashboard/recent-posts";
 import { StatsCards } from "@/components/dashboard/stats-cards";
 import DashboardSkeleton from "@/components/Skeletons/dashboard-skeleton";
 import { Bell, Search } from "lucide-react";
@@ -24,7 +27,7 @@ export default function Dashboard() {
     return <DashboardSkeleton />;
   } else {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="bg-background">
         <header className="sticky top-0 z-50 w-full border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
           <div className="container mx-auto flex h-16 items-center justify-between px-4">
             <div className="flex items-center gap-6">
@@ -52,12 +55,9 @@ export default function Dashboard() {
 
         <main className="container mx-auto px-4 py-8 space-y-8">
           <StatsCards />
-
-          {/* <AnalyticsCharts /> */}
-
-          <div className="grid gap-6 lg:grid-cols-3">
-            <div className="lg:col-span-2">{/* <RecentPosts /> */}</div>
-            <div>{/* <QuickActions /> */}</div>
+          <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
+            <RecentPosts />
+            <AnalyticsCharts />
           </div>
         </main>
       </div>

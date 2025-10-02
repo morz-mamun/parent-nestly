@@ -2,7 +2,6 @@
 
 "use client";
 import { useState, useCallback, useRef } from "react";
-import { useQuery } from "@tanstack/react-query";
 import {
   ArrowLeft,
   Plus,
@@ -38,18 +37,11 @@ import { TextEditor } from "@/components/tip-tap-editor/text-editor";
 import { useForm, Controller } from "react-hook-form";
 import { FormValues } from "@/types/blog-form";
 import { TBlog } from "@/types/blog";
+import { useBlogs } from "@/hooks/use-allBlogs";
 
 export default function Blogs() {
   // fetch all news blogs
-  const { data: allBlogs = [], refetch } = useQuery({
-    queryKey: ["allBlogs"],
-    queryFn: async () => {
-      const res = await fetch("/api/blogs");
-      const result = await res.json();
-      return result?.data;
-    },
-  });
-
+  const { data: allBlogs = [], isLoading, error, refetch } = useBlogs();
   console.log("allBlogs:", allBlogs);
 
   const [isCreating, setIsCreating] = useState(false);
@@ -258,6 +250,9 @@ export default function Blogs() {
     setIsPreviewMode(false);
     localStorage.removeItem(`blog-draft-${editingId || "new"}`);
   };
+
+  if (isLoading) return <p>Loading blogs...</p>; // show loading state
+  if (error) return <p>Failed to load blogs</p>; // show error state
 
   return (
     <div className="min-h-screen">
