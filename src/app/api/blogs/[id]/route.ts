@@ -5,11 +5,13 @@ import BlogPost from "@/models/BlogPost";
 // GET single post
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> }, // notice it's a Promise
 ) {
   try {
     await connectDB();
-    const post = await BlogPost.findById(params.id);
+    // Await params before using
+    const { id } = await params;
+    const post = await BlogPost.findById(id);
 
     if (!post) {
       return NextResponse.json(
@@ -20,7 +22,7 @@ export async function GET(
 
     return NextResponse.json({ success: true, data: post });
   } catch (error) {
-    console.error("[v0] Error fetching post:", error);
+    console.error("Error while fetching single post:", error);
     return NextResponse.json(
       { success: false, error: "Failed to fetch post" },
       { status: 500 },
@@ -31,11 +33,13 @@ export async function GET(
 // DELETE post
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> }, // notice it's a Promise
 ) {
   try {
     await connectDB();
-    const post = await BlogPost.findByIdAndDelete(params.id);
+    // Await params before using
+    const { id } = await params;
+    const post = await BlogPost.findByIdAndDelete(id);
 
     if (!post) {
       return NextResponse.json(
@@ -46,7 +50,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true, data: {} });
   } catch (error) {
-    console.error("[v0] Error deleting post:", error);
+    console.error("Error deleting post:", error);
     return NextResponse.json(
       { success: false, error: "Failed to delete post" },
       { status: 500 },
@@ -54,21 +58,23 @@ export async function DELETE(
   }
 }
 
-// PUT update post
-export async function PUT(
+// patch update post
+export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> }, // notice it's a Promise
 ) {
   try {
     await connectDB();
-    const body = await request.json();
-    const { title, content } = body;
 
-    const post = await BlogPost.findByIdAndUpdate(
-      params.id,
-      { title, content },
-      { new: true, runValidators: true },
-    );
+    // Await params before using
+    const { id } = await params;
+
+    const body = await request.json();
+    const newData = body;
+    const post = await BlogPost.findByIdAndUpdate(id, newData, {
+      new: true,
+      runValidators: true,
+    });
 
     if (!post) {
       return NextResponse.json(
@@ -79,7 +85,7 @@ export async function PUT(
 
     return NextResponse.json({ success: true, data: post });
   } catch (error) {
-    console.error("[v0] Error updating post:", error);
+    console.error("Error updating post:", error);
     return NextResponse.json(
       { success: false, error: "Failed to update post" },
       { status: 500 },

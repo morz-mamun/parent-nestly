@@ -168,7 +168,7 @@ export default function Blogs() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             ...data,
-            image: uploadUrl,
+            image: uploadUrl || data.image,
             publishDate: new Date().toISOString().split("T")[0],
           }),
         });
@@ -179,6 +179,10 @@ export default function Blogs() {
           localStorage.removeItem(`blog-draft-new`);
           toast("News blog updated successfully", {
             description: "The news blog has been updated.",
+          });
+        } else {
+          toast("Failed to update news blog", {
+            description: "An error occurred while updating the news blog.",
           });
         }
       } else {
@@ -210,6 +214,7 @@ export default function Blogs() {
     reset({
       title: blog?.title,
       image: blog?.image,
+      author: blog?.author,
       primaryKeyword: blog?.primaryKeyword,
       metaTitle: blog?.metaTitle,
       metaDescription: blog?.metaDescription,
