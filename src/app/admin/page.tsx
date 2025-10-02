@@ -37,9 +37,8 @@ export default function AdminLoginPage() {
     setIsLoading(true);
 
     setTimeout(() => {
-      const validUsername = process.env.NEXT_PUBLIC_ADMIN_USERNAME || "admin";
-      const validPassword =
-        process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "password123";
+      const validUsername = process.env.NEXT_PUBLIC_ADMIN_USERNAME;
+      const validPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
 
       if (data.username === validUsername && data.password === validPassword) {
         localStorage.setItem("adminAuth", "true");

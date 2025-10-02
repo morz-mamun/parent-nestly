@@ -2,16 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  BarChart3,
-  ClipboardList,
-  Home,
-  HomeIcon,
-  NotebookIcon,
-  Package,
-  Settings,
-  Users,
-} from "lucide-react";
+import { Blocks, Home, Settings } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -25,7 +16,6 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
 
 export function SideNavbar() {
   const user = { name: "Farhad Sir", role: "Administrator" };
@@ -37,9 +27,9 @@ export function SideNavbar() {
       <SidebarHeader className="border-b">
         <div className="flex items-center gap-2 px-4 py-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
-            ERP
+            <span className="font-bold">P</span>
           </div>
-          <div className="font-semibold">ERP System</div>
+          <div className="font-semibold">ParentNestly</div>
         </div>
       </SidebarHeader>
 
@@ -52,10 +42,10 @@ export function SideNavbar() {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  isActive={pathname === "/dashboard"}
+                  isActive={pathname === "/admin/dashboard"}
                   tooltip="Dashboard"
                 >
-                  <Link href="/dashboard">
+                  <Link href="/admin/dashboard">
                     <Home className="h-4 w-4" />
                     <span>Dashboard</span>
                   </Link>
@@ -64,12 +54,13 @@ export function SideNavbar() {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  isActive={pathname === "/dashboard/settings"}
-                  tooltip="Settings"
+                  isActive={pathname === "/admin/dashboard/blogs"}
+                  tooltip="Blogs"
                 >
-                  <Link href={`/dashboard/settings`}>
-                    <Settings className="h-4 w-4" />
-                    <span>Settings</span>
+                  <Link href={"/admin/dashboard/blogs"}>
+                    {/* blogs icon */}
+                    <Blocks className="h-4 w-4" />
+                    <span>Blogs</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
