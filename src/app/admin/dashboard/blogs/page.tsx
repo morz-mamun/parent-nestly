@@ -255,34 +255,29 @@ export default function Blogs() {
   if (error) return <p>Failed to load blogs</p>; // show error state
 
   return (
-    <div className="min-h-screen">
-      <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          {/* Back to home button */}
-          <Link href={"/"}>
-            <Button variant="outline" size="sm" className="shadow-sm">
-              <ArrowLeft className="h-4 w-4 mr-2" /> Back to Home
+    <div className="bg-background">
+      {/* Header */}
+      <header className="sticky top-16 z-10 w-full border-b border-border bg-card">
+        <div className="container mx-auto flex h-16 items-center justify-between px-4">
+          <Link href="/news">
+            <Button size="sm" variant="outline" className="shadow-sm">
+              <Eye className="h-4 w-4 mr-2" /> View News Page
             </Button>
           </Link>
 
-          {/* Search Bar */}
-          <div className="relative flex-1 md:max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search blogs by title, keyword, or author..."
-              className="w-full pl-10 pr-4 py-2 border rounded-lg text-sm"
-            />
-          </div>
+          {/* Create Button */}
           <div className="flex gap-2">
-            <Link href="/news">
-              <Button size="sm" variant="outline" className="shadow-sm">
-                <Eye className="h-4 w-4 mr-2" /> View News Page
-              </Button>
-            </Link>
+            {/* Search Bar */}
+            <div className="relative flex-1 md:max-w-md">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search blogs by title, keyword, or author..."
+                className="w-full pl-10 pr-4 py-2 border rounded-lg text-sm"
+              />
+            </div>
             <Button
               size="sm"
               onClick={() => {
@@ -292,13 +287,15 @@ export default function Blogs() {
                 setPreviewImage(null); // clear preview image
                 localStorage.removeItem("blog-draft-new"); // clear draft
               }}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg"
+              className="bg-accent text-white shadow-lg"
             >
               <Plus className="h-4 w-4 mr-2" /> New blog
             </Button>
           </div>
         </div>
+      </header>
 
+      <main className="container mx-auto px-4 py-8 space-y-8">
         {/* blog Form */}
         {isCreating && (
           <Card className="pt-0 mb-8 border-0 shadow-xl bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
@@ -661,7 +658,7 @@ export default function Blogs() {
             ))}
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

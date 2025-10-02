@@ -1,6 +1,5 @@
 "use client";
 import { AnalyticsCharts } from "@/components/dashboard/analytics-charts";
-import { QuickActions } from "@/components/dashboard/quick-actions";
 import { RecentPosts } from "@/components/dashboard/recent-posts";
 import { StatsCards } from "@/components/dashboard/stats-cards";
 import DashboardSkeleton from "@/components/Skeletons/dashboard-skeleton";
@@ -28,7 +27,7 @@ export default function Dashboard() {
   } else {
     return (
       <div className="bg-background">
-        <header className="sticky top-0 z-50 w-full border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
+        <header className="sticky top-0 z-50 w-full border-b border-border bg-card">
           <div className="container mx-auto flex h-16 items-center justify-between px-4">
             <div className="flex items-center gap-6">
               <div className="flex flex-col">
