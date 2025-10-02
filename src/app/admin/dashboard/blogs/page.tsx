@@ -19,6 +19,7 @@ import {
   Image,
   Pencil,
   Globe,
+  Search,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -57,7 +58,15 @@ export default function Blogs() {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [uploadUrl, setUploadUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
+  // Filtered blogs
+  const filteredBlogs = allBlogs.filter(
+    (blog: TBlog) =>
+      blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      blog.primaryKeyword.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      blog.author.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
   // React Hook Form
   const {
     register,
@@ -255,11 +264,24 @@ export default function Blogs() {
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
+          {/* Back to home button */}
           <Link href={"/"}>
             <Button variant="outline" size="sm" className="shadow-sm">
               <ArrowLeft className="h-4 w-4 mr-2" /> Back to Home
             </Button>
           </Link>
+
+          {/* Search Bar */}
+          <div className="relative flex-1 md:max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search blogs by title, keyword, or author..."
+              className="w-full pl-10 pr-4 py-2 border rounded-lg text-sm"
+            />
+          </div>
           <div className="flex gap-2">
             <Link href="/news">
               <Button size="sm" variant="outline" className="shadow-sm">
@@ -577,7 +599,7 @@ export default function Blogs() {
           </div>
 
           <div className="grid gap-4">
-            {allBlogs?.map((blog: any) => (
+            {filteredBlogs?.map((blog: any) => (
               <Card
                 key={blog._id}
                 className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm"
