@@ -15,4 +15,8 @@ export const navItems = [
     name: "Baby Care",
     link: "#baby-care",
   },
+  {
+    name: "Blogs",
+    link: "/blogs",
+  },
 ];

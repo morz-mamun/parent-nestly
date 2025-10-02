@@ -9,8 +9,10 @@ import {
 } from "@/components/ui/popover";
 import { Triangle, Menu, Search } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export function WebSiteNavbar() {
+  const pathName = usePathname();
   return (
     <nav className="sticky top-0 z-50 bg-white border-b border-border/50">
       <div className="max-w-screen-2xl mx-auto flex items-center justify-between px-4 sm:px-6 py-4">
@@ -29,10 +31,14 @@ export function WebSiteNavbar() {
               <Link
                 key={item?.name}
                 href={item?.link}
-                className="relative hover:text-primary transition-colors duration-200 group"
+                className={`relative hover:text-primary transition-colors duration-200 group ${
+                  item?.link === pathName && "text-primary"
+                }`}
               >
                 {item.name}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
+                <span
+                  className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full ${item?.link === pathName && "w-full"}`}
+                />
               </Link>
             ))}
           </div>
