@@ -6,27 +6,6 @@ import { useBlogs } from "@/hooks/use-allBlogs";
 import { TBlog } from "@/types/blog";
 import Link from "next/link";
 
-const posts = [
-  {
-    id: 1,
-    title: "Getting Started with Next.js 15",
-    category: "Technology",
-    views: "12.4K",
-    comments: 89,
-    status: "published",
-    date: "2 hours ago",
-  },
-  {
-    id: 2,
-    title: "Modern Design Principles for 2025",
-    category: "Design",
-    views: "8.2K",
-    comments: 56,
-    status: "published",
-    date: "5 hours ago",
-  },
-];
-
 export function RecentPosts() {
   const { data: allBlogs = [], isLoading, error, refetch } = useBlogs();
   return (
@@ -46,7 +25,7 @@ export function RecentPosts() {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {allBlogs?.map((post: TBlog) => (
+          {allBlogs?.slice(0, 2).map((post: TBlog) => (
             <div
               key={post._id}
               className="flex items-start gap-4 p-4 rounded-lg border border-border hover:bg-secondary/50 transition-colors"
