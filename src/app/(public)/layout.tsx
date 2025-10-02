@@ -11,7 +11,7 @@ export default function PublicLayout({
       {/* NAVBAR */}
       <WebSiteNavbar />
       {/* <ScrollProgress /> */}
-      <div className="mx-3 md:mx-6">{children}</div>
+      <div className="">{children}</div>
       {/* FOOTER */}
       <Footer />
     </main>
