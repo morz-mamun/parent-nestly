@@ -22,7 +22,8 @@ export async function POST(request: NextRequest) {
   try {
     await connectDB();
     const body = await request.json();
-    const { title, content } = body;
+    console.log("body:", body);
+    const { title, image, content } = body;
 
     if (!title || !content) {
       return NextResponse.json(
@@ -31,7 +32,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const post = await BlogPost.create({ title, content });
+    const post = await BlogPost.create(body);
     return NextResponse.json({ success: true, data: post }, { status: 201 });
   } catch (error) {
     console.error("[v0] Error creating post:", error);

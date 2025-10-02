@@ -38,15 +38,18 @@ import { useForm, Controller } from "react-hook-form";
 import { FormValues } from "@/types/blog-form";
 import { TBlog } from "@/types/blog";
 
-export default function Newsblogs() {
+export default function Blogs() {
   // fetch all news blogs
   const { data: allBlogs = [], refetch } = useQuery({
     queryKey: ["allBlogs"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:5000/news");
-      return res.json();
+      const res = await fetch("/api/blogs");
+      const result = await res.json();
+      return result?.data;
     },
   });
+
+  console.log("allBlogs:", allBlogs);
 
   const [isCreating, setIsCreating] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -122,15 +125,17 @@ export default function Newsblogs() {
     const formData = new FormData();
     formData.append("image", file);
 
-    // const res = await fetch(
-    //   `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
-    //   { method: "POST", body: formData }
-    // );
-    // const data = await res.json();
-    // const imageUrl = data.data.url;
+    const res = await fetch(
+      `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
+      { method: "POST", body: formData },
+    );
+    const data = await res.json();
+    console.log(data);
 
-    // setUploadUrl(imageUrl);
-    // setValue("image", imageUrl);
+    const imageUrl = data.data.url;
+
+    setUploadUrl(imageUrl);
+    setValue("image", imageUrl);
   };
 
   const openFileDialog = () => {
@@ -153,49 +158,49 @@ export default function Newsblogs() {
       return;
     }
 
-    // try {
-    //   if (editingId) {
-    //     const res = await fetch(`http://localhost:5000/news/${editingId}`, {
-    //       method: "PATCH",
-    //       headers: { "Content-Type": "application/json" },
-    //       body: JSON.stringify({
-    //         ...data,
-    //         image: uploadUrl,
-    //         publishDate: new Date().toISOString().split("T")[0],
-    //       }),
-    //     });
-    //     if (res.ok) {
-    //       refetch();
-    //       setIsCreating(false);
-    //       reset();
-    //       localStorage.removeItem(`blog-draft-new`);
-    //       toast("News blog updated successfully", {
-    //         description: "The news blog has been updated.",
-    //       });
-    //     }
-    //   } else {
-    //     const res = await fetch("http://localhost:5000/add-news", {
-    //       method: "POST",
-    //       headers: { "Content-Type": "application/json" },
-    //       body: JSON.stringify({
-    //         ...data,
-    //         image: uploadUrl,
-    //         publishDate: new Date().toISOString().split("T")[0],
-    //       }),
-    //     });
-    //     if (res.ok) {
-    //       refetch();
-    //       reset();
-    //       setIsCreating(false);
-    //       localStorage.removeItem(`blog-draft-new`);
-    //       toast("News blog created successfully", {
-    //         description: "The news blog has been created.",
-    //       });
-    //     }
-    //   }
-    // } catch (error: any) {
-    //   toast("Failed to save news blog", { description: error.message });
-    // }
+    try {
+      if (editingId) {
+        const res = await fetch(`http://localhost:5000/news/${editingId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ...data,
+            image: uploadUrl,
+            publishDate: new Date().toISOString().split("T")[0],
+          }),
+        });
+        if (res.ok) {
+          refetch();
+          setIsCreating(false);
+          reset();
+          localStorage.removeItem(`blog-draft-new`);
+          toast("News blog updated successfully", {
+            description: "The news blog has been updated.",
+          });
+        }
+      } else {
+        const res = await fetch("/api/blogs", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ...data,
+            image: uploadUrl,
+            publishDate: new Date().toISOString().split("T")[0],
+          }),
+        });
+        if (res.ok) {
+          refetch();
+          reset();
+          setIsCreating(false);
+          localStorage.removeItem(`blog-draft-new`);
+          toast("News blog created successfully", {
+            description: "The news blog has been created.",
+          });
+        }
+      }
+    } catch (error: any) {
+      toast("Failed to save news blog", { description: error.message });
+    }
   };
 
   const handleEdit = (blog: TBlog) => {
