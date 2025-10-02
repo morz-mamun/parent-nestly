@@ -25,12 +25,14 @@ export function SideNavbar() {
     <Sidebar>
       {/* side bar header */}
       <SidebarHeader className="border-b">
-        <div className="flex items-center gap-2 px-4 py-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
-            <span className="font-bold">P</span>
+        <Link href="/">
+          <div className="flex items-center gap-2 px-4 py-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
+              <span className="font-bold">P</span>
+            </div>
+            <div className="font-semibold">ParentNestly</div>
           </div>
-          <div className="font-semibold">ParentNestly</div>
-        </div>
+        </Link>
       </SidebarHeader>
 
       {/* side bar content */}

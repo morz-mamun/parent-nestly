@@ -251,11 +251,11 @@ export default function Blogs() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div className="min-h-screen">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <Link href={"/dashboard/adminhome"}>
+          <Link href={"/"}>
             <Button variant="outline" size="sm" className="shadow-sm">
               <ArrowLeft className="h-4 w-4 mr-2" /> Back to Home
             </Button>
@@ -570,9 +570,9 @@ export default function Blogs() {
         {/* blog List */}
         <div className="space-y-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-semibold">Manage blogs</h2>
-            <div className="text-sm text-gray-500">
-              {allBlogs?.length} total blogs
+            <h2 className="text-2xl font-semibold">Manage Your Blogs</h2>
+            <div className="border rounded-full px-4 py-1 text-sm font-medium">
+              {allBlogs?.length} Blog{allBlogs?.length !== 1 && "s"} Found
             </div>
           </div>
 
