@@ -30,7 +30,7 @@ export default function PublicBlogs() {
 
   isLoading && console.log("Loading...");
   return (
-    <div className="container mx-auto px-2 my-10">
+    <div className="min-h-screen container mx-auto px-2 my-10">
       {/* Search and Filter */}
       <div className="mb-8 flex items-center justify-between">
         <h1 className="text-3xl font-bold text-gray-800">News blogs</h1>
