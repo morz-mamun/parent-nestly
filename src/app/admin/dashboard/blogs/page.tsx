@@ -259,7 +259,7 @@ export default function Blogs() {
       {/* Header */}
       <header className="sticky top-16 z-10 w-full border-b border-border bg-card">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <Link href="/news">
+          <Link href="/blogs">
             <Button size="sm" variant="outline" className="shadow-sm">
               <Eye className="h-4 w-4 mr-2" /> View News Page
             </Button>
