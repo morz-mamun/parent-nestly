@@ -4,7 +4,7 @@ export const useBlogs = () => {
   return useQuery({
     queryKey: ["allBlogs"],
     queryFn: async () => {
-      const res = await fetch("/api/blogs");
+      const res = await fetch("/api/admin/blogs");
       if (!res.ok) throw new Error("Failed to fetch blogs");
       const result = await res.json();
       return result?.data;

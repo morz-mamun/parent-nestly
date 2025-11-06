@@ -3,7 +3,6 @@
 "use client";
 import { useState, useCallback, useRef } from "react";
 import {
-  ArrowLeft,
   Plus,
   Edit,
   Trash2,
@@ -118,25 +117,34 @@ export default function Blogs() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Preview
+    // Preview locally
     const preview = URL.createObjectURL(file);
     setPreviewImage(preview);
 
-    // Upload to ImgBB
-    const formData = new FormData();
-    formData.append("image", file);
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
 
-    const res = await fetch(
-      `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
-      { method: "POST", body: formData },
-    );
-    const data = await res.json();
-    console.log("ImgBB response:", data);
+      // Upload via server API route
+      const res = await fetch("/api/admin/upload", {
+        method: "POST",
+        body: formData,
+      });
 
-    const imageUrl = data.data.url;
+      const data = await res.json();
 
-    setUploadUrl(imageUrl);
-    setValue("image", imageUrl);
+      if (data?.data?.url) {
+        setUploadUrl(data.data.url);
+        setValue("image", data.data.url); // update react-hook-form value
+        toast("Image uploaded successfully!");
+      } else {
+        toast("Failed to upload image", {
+          description: data?.error || "Unknown error",
+        });
+      }
+    } catch (error: any) {
+      toast("Image upload error", { description: error.message });
+    }
   };
 
   const openFileDialog = () => {
@@ -164,7 +172,7 @@ export default function Blogs() {
 
     try {
       if (editingId) {
-        const res = await fetch(`/api/blogs/${editingId}`, {
+        const res = await fetch(`/api/admin/blogs/${editingId}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -187,7 +195,7 @@ export default function Blogs() {
           });
         }
       } else {
-        const res = await fetch("/api/blogs", {
+        const res = await fetch("/api/admin/blogs", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -231,7 +239,7 @@ export default function Blogs() {
 
   const handleDelete = async (id: string) => {
     try {
-      const res = await fetch(`/api/blogs/${id}`, {
+      const res = await fetch(`/api/admin/blogs/${id}`, {
         method: "DELETE",
       });
       if (res.ok) {
@@ -259,7 +267,7 @@ export default function Blogs() {
       {/* Header */}
       <header className="sticky top-16 z-10 w-full border-b border-border bg-card">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <Link href="/news">
+          <Link href="/blogs">
             <Button size="sm" variant="outline" className="shadow-sm">
               <Eye className="h-4 w-4 mr-2" /> View News Page
             </Button>

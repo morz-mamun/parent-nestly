@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Calendar, Clock, Share2, User } from "lucide-react";
@@ -11,7 +11,7 @@ export default function BlogDetailsPage({ id }: { id: string }) {
   const { data: blog, isLoading } = useQuery({
     queryKey: ["blog", id],
     queryFn: async () => {
-      const url = `/api/blogs/${id}`;
+      const url = `/api/admin/blogs/${id}`;
       const res = await fetch(url);
       if (!res.ok) throw new Error("Failed to fetch blog");
       const result = await res.json();
@@ -124,7 +124,7 @@ export default function BlogDetailsPage({ id }: { id: string }) {
         </article>
 
         <div className="mt-12 text-center">
-          <Link href="/news">
+          <Link href="/blogs">
             <Button>Read More blogs</Button>
           </Link>
         </div>

@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -36,18 +35,25 @@ export default function AdminLoginPage() {
     setError("");
     setIsLoading(true);
 
-    setTimeout(() => {
-      const validUsername = process.env.NEXT_PUBLIC_ADMIN_USERNAME;
-      const validPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
+    try {
+      const res = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
 
-      if (data.username === validUsername && data.password === validPassword) {
+      if (res.ok) {
         localStorage.setItem("adminAuth", "true");
         router.push("/admin/dashboard");
       } else {
-        setError("Invalid username or password");
-        setIsLoading(false);
+        const result = await res.json();
+        setError(result.message || "Login failed");
       }
-    }, 500);
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -61,7 +67,7 @@ export default function AdminLoginPage() {
           </div>
           <CardTitle className="text-2xl font-bold">Admin Access</CardTitle>
           <CardDescription>
-            Enter your credentials to access the blog dashboard
+            Enter your credentials to access the admin dashboard
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -81,6 +87,7 @@ export default function AdminLoginPage() {
                 </p>
               )}
             </div>
+
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <Input
