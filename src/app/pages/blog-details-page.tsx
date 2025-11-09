@@ -7,11 +7,17 @@ import { ArrowLeft, Calendar, Clock, Share2, User } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 
-export default function BlogDetailsPage({ id }: { id: string }) {
+export default function BlogDetailsPage({
+  id,
+  slug,
+}: {
+  id?: string;
+  slug?: string;
+}) {
   const { data: blog, isLoading } = useQuery({
-    queryKey: ["blog", id],
+    queryKey: ["blog", id || slug],
     queryFn: async () => {
-      const url = `/api/admin/blogs/${id}`;
+      const url = id ? `/api/admin/blogs/${id}` : `/api/admin/blogs/${slug}`;
       const res = await fetch(url);
       if (!res.ok) throw new Error("Failed to fetch blog");
       const result = await res.json();
@@ -38,7 +44,7 @@ export default function BlogDetailsPage({ id }: { id: string }) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <Card className="p-8 text-center">
-          <h1 className="text-2xl font-bold mb-4">blog Not Found</h1>
+          <h1 className="text-2xl font-bold mb-4">Blog Not Found</h1>
           <p className="text-gray-600 mb-4">
             The blog you&apos;re looking for doesn&apos;t exist.
           </p>
@@ -80,7 +86,6 @@ export default function BlogDetailsPage({ id }: { id: string }) {
               {blog?.title || "Loading..."}
             </h1>
 
-            {/* blog image */}
             {blog?.image && (
               <div className="w-full h-96 overflow-hidden">
                 <img
@@ -118,7 +123,7 @@ export default function BlogDetailsPage({ id }: { id: string }) {
           <div
             className="prose prose-lg max-w-none dark:prose-invert"
             dangerouslySetInnerHTML={{
-              __html: blog?.content || "blog Content",
+              __html: blog?.content || "Blog Content",
             }}
           />
         </article>

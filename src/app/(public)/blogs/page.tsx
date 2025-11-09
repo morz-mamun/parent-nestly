@@ -31,7 +31,7 @@ export default function BlogsPage() {
   // ✅ Categories strictly typed as string[]
   const categories: string[] = useMemo(() => {
     const uniqueCategories = new Set<string>(
-      allPublishedBlogs?.map((blog: TBlog) => blog.primaryKeyword) || [],
+      allPublishedBlogs?.map((blog: TBlog) => blog?.category) || [],
     );
     return Array.from(uniqueCategories);
   }, [allPublishedBlogs]);
@@ -41,11 +41,12 @@ export default function BlogsPage() {
     return allPublishedBlogs?.filter((blog: TBlog) => {
       const matchesSearch =
         blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        blog.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
         blog.primaryKeyword.toLowerCase().includes(searchTerm.toLowerCase()) ||
         blog.author.toLowerCase().includes(searchTerm.toLowerCase());
 
       const matchesCategory =
-        activeTab === "all" || blog.primaryKeyword === activeTab;
+        activeTab === "all" || blog.category === activeTab;
 
       return matchesSearch && matchesCategory;
     });

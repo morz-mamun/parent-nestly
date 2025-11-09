@@ -2,11 +2,20 @@ import { type NextRequest, NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import BlogPost from "@/models/BlogPost";
 
-// GET all posts
-export async function GET() {
+// ✅ GET all posts or filter by category
+export async function GET(req: NextRequest) {
   try {
     await connectDB();
-    const posts = await BlogPost.find({}).sort({ createdAt: -1 });
+
+    // Get category from query params
+    const { searchParams } = new URL(req.url);
+    const category = searchParams.get("category");
+
+    // If category exists, filter by it; otherwise, get all
+    const filter = category ? { category } : {};
+
+    const posts = await BlogPost.find(filter).sort({ createdAt: -1 });
+
     return NextResponse.json({ success: true, data: posts });
   } catch (error) {
     console.error("Error fetching posts:", error);

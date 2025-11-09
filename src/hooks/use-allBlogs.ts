@@ -1,10 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 
-export const useBlogs = () => {
+export const useBlogs = (category?: string) => {
   return useQuery({
-    queryKey: ["allBlogs"],
+    queryKey: ["blogs", category],
     queryFn: async () => {
-      const res = await fetch("/api/admin/blogs");
+      const url = category
+        ? `/api/admin/blogs?category=${encodeURIComponent(category)}`
+        : `/api/admin/blogs`;
+      const res = await fetch(url);
       if (!res.ok) throw new Error("Failed to fetch blogs");
       const result = await res.json();
       return result?.data;
@@ -14,18 +17,20 @@ export const useBlogs = () => {
 
 // If i want to filter by status
 
-// export const useBlogs = (status?: string) => {
-//   return useQuery({
-//     queryKey: ["blogs", status],
-//     queryFn: async () => {
-//       const url = status ? `/api/blogs?status=${status}` : `/api/blogs`;
-//       const res = await fetch(url);
-//       if (!res.ok) throw new Error("Failed to fetch blogs");
-//       const result = await res.json();
-//       return result?.data;
-//     },
-//   });
-// };
+export const useFilteredBlogsByCategory = (category?: string) => {
+  return useQuery({
+    queryKey: ["blogs", category],
+    queryFn: async () => {
+      const url = category
+        ? `/api/admin/blogs?category=${category}`
+        : `/api/admin/blogs`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("Failed to fetch blogs");
+      const result = await res.json();
+      return result?.data;
+    },
+  });
+};
 
 // use it in ur component
 // const { data: publishedBlogs } = useBlogs("published");

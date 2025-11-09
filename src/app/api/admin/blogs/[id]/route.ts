@@ -1,17 +1,26 @@
 import { type NextRequest, NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import BlogPost from "@/models/BlogPost";
+import mongoose from "mongoose";
 
-// GET single post
+/// GET single post by ID or slug
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }, // notice it's a Promise
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     await connectDB();
-    // Await params before using
     const { id } = await params;
-    const post = await BlogPost.findById(id);
+
+    let post;
+
+    // Check if id is a valid MongoDB ObjectId
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      post = await BlogPost.findById(id);
+    } else {
+      // If not valid ObjectId, treat it as a slug
+      post = await BlogPost.findOne({ slug: id });
+    }
 
     if (!post) {
       return NextResponse.json(
