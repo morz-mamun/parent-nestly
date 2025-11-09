@@ -26,6 +26,7 @@ export async function POST(request: NextRequest) {
 
     const {
       title,
+      category,
       image,
       content,
       status,
@@ -46,6 +47,7 @@ export async function POST(request: NextRequest) {
 
     const post = await BlogPost.create({
       title,
+      category,
       image,
       content,
       status: status || "draft",

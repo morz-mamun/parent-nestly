@@ -10,4 +10,5 @@ export type TBlog = {
   content: string;
   status: "draft" | "published";
   publishDate: string;
+  category: string;
 };

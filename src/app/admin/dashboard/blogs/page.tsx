@@ -18,6 +18,7 @@ import {
   Pencil,
   Globe,
   Search,
+  ImageIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -37,6 +38,13 @@ import { useForm, Controller } from "react-hook-form";
 import { FormValues } from "@/types/blog-form";
 import { TBlog } from "@/types/blog";
 import { useBlogs } from "@/hooks/use-allBlogs";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function Blogs() {
   // fetch all news blogs
@@ -78,6 +86,7 @@ export default function Blogs() {
       slug: "",
       content: "",
       status: "draft",
+      category: "",
     },
   });
 
@@ -158,7 +167,7 @@ export default function Blogs() {
   };
   // Submit blog post function
   const onSubmit = async (data: FormValues) => {
-    console.log("blog blog data:", data);
+    console.log("blog data:", data);
 
     if (!data.title || !data.image || !data.content) {
       toast(
@@ -220,6 +229,8 @@ export default function Blogs() {
   };
 
   const handleEdit = (blog: TBlog) => {
+    console.log("edit blog", blog);
+
     reset({
       title: blog?.title,
       image: blog?.image,
@@ -230,6 +241,7 @@ export default function Blogs() {
       slug: blog?.slug,
       content: blog?.content,
       status: blog?.status,
+      category: blog?.category,
     });
     setPreviewImage(blog?.image);
     setEditingId(blog?._id);
@@ -307,9 +319,9 @@ export default function Blogs() {
         {/* blog Form */}
         {isCreating && (
           <Card className="pt-0 mb-8 border-0 shadow-xl bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
-            <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 border-b">
+            <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 shadow">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 pt-2">
                   <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg">
                     <Sparkles className="h-5 w-5 text-white" />
                   </div>
@@ -333,9 +345,10 @@ export default function Blogs() {
                     <Eye className="h-4 w-4 mr-2" />
                     {isPreviewMode ? "Edit" : "Preview"}
                   </Button>
-                  <Button variant="ghost" size="sm" onClick={loadDraft}>
+                  {/* Will implement later, Have to check the logic */}
+                  {/* <Button variant="ghost" size="sm" onClick={loadDraft}>
                     <Clock className="h-4 w-4 mr-2" /> Load Draft
-                  </Button>
+                  </Button> */}
                   <Button variant="ghost" size="sm" onClick={resetForm}>
                     <X className="h-4 w-4" />
                   </Button>
@@ -383,7 +396,7 @@ export default function Blogs() {
                         htmlFor="title"
                         className="text-sm font-medium flex items-center gap-2"
                       >
-                        <FileText className="h-4 w-4" /> blog Title *
+                        <FileText className="h-4 w-4" /> Blog Title *
                       </Label>
                       <input
                         id="title"
@@ -413,13 +426,33 @@ export default function Blogs() {
                       <Label htmlFor="status" className="text-sm font-medium">
                         <Globe className="h-4 w-4" /> Status
                       </Label>
-                      <select
+                      <Controller
+                        name="status"
+                        control={control}
+                        render={({ field }) => (
+                          <Select
+                            value={field.value || ""}
+                            onValueChange={field.onChange}
+                          >
+                            <SelectTrigger className="w-full !h-12 border-2 border-gray-200 rounded-md focus:border-blue-500 dark:border-gray-600 dark:bg-gray-800">
+                              <SelectValue placeholder="Select a status" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="draft">Draft</SelectItem>
+                              <SelectItem value="published">
+                                Published
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                        )}
+                      />
+                      {/* <select
                         {...register("status")}
                         className="w-full h-12 px-3 border-2 border-gray-200 rounded-md focus:border-blue-500 dark:border-gray-600 dark:bg-gray-800"
                       >
                         <option value="draft">Draft</option>
                         <option value="published">Published</option>
-                      </select>
+                      </select> */}
                     </div>
                   </div>
 
@@ -472,7 +505,56 @@ export default function Blogs() {
                     </div>
                   </div>
                   {/* Image upload, slug */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {/* Category dropdown field */}
+                    <div className="space-y-2">
+                      <Label htmlFor="category" className="text-sm font-medium">
+                        <ImageIcon className="h-4 w-4" /> Category
+                      </Label>
+                      <Controller
+                        name="category"
+                        control={control}
+                        render={({ field }) => (
+                          <Select
+                            value={field.value || ""}
+                            onValueChange={field.onChange}
+                          >
+                            <SelectTrigger className="w-full !h-12 border-2 border-gray-200 rounded-md focus:border-blue-500 dark:border-gray-600 dark:bg-gray-800">
+                              <SelectValue placeholder="Select a category" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Baby Care">
+                                Baby Care
+                              </SelectItem>
+                              <SelectItem value="Early Learning">
+                                Early Learning
+                              </SelectItem>
+                              <SelectItem value="Parenting Life">
+                                Parenting Life
+                              </SelectItem>
+                              <SelectItem value="Product Guides">
+                                Product Guides
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                        )}
+                      />
+                    </div>
+                    {/* Slug */}
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="slug"
+                        className="text-sm font-medium flex items-center gap-2"
+                      >
+                        <FileText className="h-4 w-4" /> Slug *
+                      </Label>
+                      <input
+                        id="slug"
+                        {...register("slug", { required: true })}
+                        placeholder="Enter a catchy slug..."
+                        className="h-12 text-base border-2 focus:border-blue-600 rounded-md px-3 w-full placeholder:text-sm"
+                      />
+                    </div>
                     {/* Image upload */}
                     <div className="space-y-2">
                       <Label className="text-sm font-medium flex items-center gap-2">
@@ -520,21 +602,6 @@ export default function Blogs() {
                           </div>
                         )}
                       </div>
-                    </div>
-                    {/* Slug */}
-                    <div className="space-y-2">
-                      <Label
-                        htmlFor="slug"
-                        className="text-sm font-medium flex items-center gap-2"
-                      >
-                        <FileText className="h-4 w-4" /> Slug *
-                      </Label>
-                      <input
-                        id="slug"
-                        {...register("slug", { required: true })}
-                        placeholder="Enter a catchy slug..."
-                        className="h-12 text-base border-2 focus:border-blue-600 rounded-md px-3 w-full placeholder:text-sm"
-                      />
                     </div>
                   </div>
 

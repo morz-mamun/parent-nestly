@@ -71,6 +71,8 @@ export async function PATCH(
 
     const body = await request.json();
     const newData = body;
+    console.log("edit data", newData);
+
     const post = await BlogPost.findByIdAndUpdate(id, newData, {
       new: true,
       runValidators: true,

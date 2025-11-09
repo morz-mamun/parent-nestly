@@ -8,4 +8,6 @@ export type FormValues = {
   slug: string;
   content: string;
   status: "draft" | "published";
+  publishDate: string;
+  category: string;
 };
