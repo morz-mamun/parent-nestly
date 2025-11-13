@@ -54,6 +54,7 @@ type TextEditorProps = {
   placeholder?: string;
   onAutoSave?: (content: string) => void;
   showWordCount?: boolean;
+  className?: string;
 };
 
 export function TextEditor({
@@ -62,6 +63,7 @@ export function TextEditor({
   placeholder = "Start writing your article...",
   onAutoSave,
   showWordCount = true,
+  className,
 }: TextEditorProps) {
   const [linkUrl, setLinkUrl] = useState("");
   const [imageUrl, setImageUrl] = useState("");
@@ -316,9 +318,9 @@ export function TextEditor({
   );
 
   return (
-    <div className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden bg-white dark:bg-gray-900 shadow-sm">
+    <div className="border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 shadow-sm">
       {/* Toolbar */}
-      <div className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 p-3">
+      <div className="sticky top-0 z-30 border-b border-gray-200 dark:border-gray-700 bg-gray-50/95 dark:bg-gray-800/90 backdrop-blur-sm p-3">
         <div className="flex flex-wrap items-center gap-1">
           {/* History */}
           <div className="flex items-center gap-1">

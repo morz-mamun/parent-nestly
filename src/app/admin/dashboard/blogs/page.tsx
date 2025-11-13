@@ -711,32 +711,34 @@ export default function Blogs() {
 
                   {/* Rich Text Editor */}
                   <div className="space-y-2 pt-6">
-                    <Label className="text-sm font-medium">
+                    <Label htmlFor="content" className="text-sm font-medium">
                       <ImageIcon className="h-4 w-4" /> blog Content *
                     </Label>
-                    <Controller
-                      name="content"
-                      control={control}
-                      rules={{ required: true }}
-                      render={({ field }) => (
-                        <TextEditor
-                          content={field.value}
-                          onChange={field.onChange}
-                          onAutoSave={handleAutoSave}
-                          placeholder="Start writing your blog content here..."
-                          showWordCount={true}
-                        />
+                    <div className="border-y border-r h-[600px] overflow-y-auto rounded-md">
+                      <Controller
+                        name="content"
+                        control={control}
+                        rules={{ required: true }}
+                        render={({ field }) => (
+                          <TextEditor
+                            content={field.value}
+                            onChange={field.onChange}
+                            onAutoSave={handleAutoSave}
+                            placeholder="Start writing your blog content here..."
+                            showWordCount={true}
+                          />
+                        )}
+                      />
+                      {errors.content && (
+                        <p className="text-red-500 text-sm">
+                          Content is required
+                        </p>
                       )}
-                    />
-                    {errors.content && (
-                      <p className="text-red-500 text-sm">
-                        Content is required
-                      </p>
-                    )}
+                    </div>
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex gap-4 pt-4">
+                  <div className="flex gap-4">
                     <Button
                       variant="outline"
                       type="submit"
