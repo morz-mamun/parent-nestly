@@ -31,8 +31,6 @@ export async function POST(request: NextRequest) {
   try {
     await connectDB();
     const body = await request.json();
-    console.log(body);
-
     const {
       title,
       category,

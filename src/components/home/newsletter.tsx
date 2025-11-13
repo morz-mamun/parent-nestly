@@ -26,8 +26,6 @@ export function NewsletterForm() {
 
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
-    console.log("Form Data Submitted:", data);
-
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1000));
 

@@ -66,6 +66,19 @@ export function SideNavbar() {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={pathname === "/admin/dashboard/categories"}
+                  tooltip="Categories"
+                >
+                  <Link href={"/admin/dashboard/categories"}>
+                    {/* categories icon */}
+                    <Blocks className="h-4 w-4" />
+                    <span>Categories</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

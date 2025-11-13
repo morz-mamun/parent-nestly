@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 "use client";
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
+import type React from "react";
+
 import {
   Plus,
   Edit,
@@ -13,11 +14,6 @@ import {
   FileText,
   Sparkles,
   X,
-  Clock,
-  Image,
-  Pencil,
-  Globe,
-  Search,
   ImageIcon,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -35,8 +31,8 @@ import { Label } from "../../../../components/ui/label";
 import Link from "next/link";
 import { TextEditor } from "@/components/tip-tap-editor/text-editor";
 import { useForm, Controller } from "react-hook-form";
-import { FormValues } from "@/types/blog-form";
-import { TBlog } from "@/types/blog";
+import type { FormValues } from "@/types/blog-form";
+import type { TBlog } from "@/types/blog";
 import { useBlogs } from "@/hooks/use-allBlogs";
 import {
   Select,
@@ -46,11 +42,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+interface Category {
+  name: string;
+  subcategories: string[];
+}
+
 export default function Blogs() {
   // fetch all news blogs
   const { data: allBlogs = [], isLoading, error, refetch } = useBlogs();
-  console.log("allBlogs:", allBlogs);
-
   const [isCreating, setIsCreating] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isPreviewMode, setIsPreviewMode] = useState(false);
@@ -59,6 +58,9 @@ export default function Blogs() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [searchTerm, setSearchTerm] = useState("");
 
+  const [categories, setCategories] = useState<Record<string, Category>>({});
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
+
   // Filtered blogs
   const filteredBlogs = allBlogs.filter(
     (blog: TBlog) =>
@@ -66,6 +68,7 @@ export default function Blogs() {
       blog.primaryKeyword.toLowerCase().includes(searchTerm.toLowerCase()) ||
       blog.author.toLowerCase().includes(searchTerm.toLowerCase()),
   );
+
   // React Hook Form
   const {
     register,
@@ -87,10 +90,52 @@ export default function Blogs() {
       content: "",
       status: "draft",
       category: "",
+      subcategory: "",
     },
   });
 
   const formValues = watch();
+  const selectedCategory = watch("category");
+
+  useEffect(() => {
+    if (selectedCategory) {
+      setValue("subcategory", "");
+    }
+  }, [selectedCategory, setValue]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch("/api/admin/categories");
+        const data = await res.json();
+        const categoryMap = data.data.reduce(
+          (acc: Record<string, Category>, cat: Category) => {
+            const key = cat.name.toLowerCase().replace(/\s+/g, "-");
+            acc[key] = cat;
+            return acc;
+          },
+          {},
+        );
+        setCategories(categoryMap);
+      } catch (error: any) {
+        console.error("Failed to load categories:", error);
+      } finally {
+        setCategoriesLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  const getCurrentSubcategories = () => {
+    if (!selectedCategory) return [];
+
+    // Find the category in the categories map
+    const category = Object.values(categories).find(
+      (cat) => cat.name === selectedCategory,
+    );
+    return category?.subcategories || [];
+  };
 
   // Auto-save function
   const handleAutoSave = useCallback(
@@ -165,10 +210,9 @@ export default function Blogs() {
     setUploadUrl(null);
     setValue("image", ""); // reset form value
   };
+
   // Submit blog post function
   const onSubmit = async (data: FormValues) => {
-    console.log("blog data:", data);
-
     if (!data.title || !data.image || !data.content) {
       toast(
         `${data.title ? "" : "Title"} ${data.image ? "" : "Image"} ${data.content ? "" : "Content"} is required`,
@@ -229,8 +273,6 @@ export default function Blogs() {
   };
 
   const handleEdit = (blog: TBlog) => {
-    console.log("edit blog", blog);
-
     reset({
       title: blog?.title,
       image: blog?.image,
@@ -242,6 +284,7 @@ export default function Blogs() {
       content: blog?.content,
       status: blog?.status,
       category: blog?.category,
+      subcategory: blog?.subcategory,
     });
     setPreviewImage(blog?.image);
     setEditingId(blog?._id);
@@ -279,17 +322,32 @@ export default function Blogs() {
       {/* Header */}
       <header className="sticky top-16 z-10 w-full border-b border-border bg-card">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <Link href="/blogs">
-            <Button size="sm" variant="outline" className="shadow-sm">
-              <Eye className="h-4 w-4 mr-2" /> View News Page
-            </Button>
-          </Link>
+          <div className="flex gap-2">
+            <Link href="/blogs">
+              <Button
+                size="sm"
+                variant="outline"
+                className="shadow-sm bg-transparent"
+              >
+                <Eye className="h-4 w-4 mr-2" /> View News Page
+              </Button>
+            </Link>
+            <Link href="/admin/categories">
+              <Button
+                size="sm"
+                variant="outline"
+                className="shadow-sm bg-transparent"
+              >
+                Manage Categories
+              </Button>
+            </Link>
+          </div>
 
           {/* Create Button */}
           <div className="flex gap-2">
             {/* Search Bar */}
             <div className="relative flex-1 md:max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
               <input
                 type="text"
                 value={searchTerm}
@@ -345,10 +403,6 @@ export default function Blogs() {
                     <Eye className="h-4 w-4 mr-2" />
                     {isPreviewMode ? "Edit" : "Preview"}
                   </Button>
-                  {/* Will implement later, Have to check the logic */}
-                  {/* <Button variant="ghost" size="sm" onClick={loadDraft}>
-                    <Clock className="h-4 w-4 mr-2" /> Load Draft
-                  </Button> */}
                   <Button variant="ghost" size="sm" onClick={resetForm}>
                     <X className="h-4 w-4" />
                   </Button>
@@ -424,7 +478,7 @@ export default function Blogs() {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="status" className="text-sm font-medium">
-                        <Globe className="h-4 w-4" /> Status
+                        <ImageIcon className="h-4 w-4" /> Status
                       </Label>
                       <Controller
                         name="status"
@@ -446,13 +500,6 @@ export default function Blogs() {
                           </Select>
                         )}
                       />
-                      {/* <select
-                        {...register("status")}
-                        className="w-full h-12 px-3 border-2 border-gray-200 rounded-md focus:border-blue-500 dark:border-gray-600 dark:bg-gray-800"
-                      >
-                        <option value="draft">Draft</option>
-                        <option value="published">Published</option>
-                      </select> */}
                     </div>
                   </div>
 
@@ -504,44 +551,100 @@ export default function Blogs() {
                       />
                     </div>
                   </div>
+
                   {/* Image upload, slug */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {/* Category dropdown field */}
                     <div className="space-y-2">
                       <Label htmlFor="category" className="text-sm font-medium">
-                        <ImageIcon className="h-4 w-4" /> Category
+                        <ImageIcon className="h-4 w-4 inline mr-2" /> Category
                       </Label>
-                      <Controller
-                        name="category"
-                        control={control}
-                        render={({ field }) => (
-                          <Select
-                            value={field.value || ""}
-                            onValueChange={field.onChange}
-                          >
-                            <SelectTrigger className="w-full !h-12 border-2 border-gray-200 rounded-md focus:border-blue-500 dark:border-gray-600 dark:bg-gray-800">
-                              <SelectValue placeholder="Select a category" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="Baby Care">
-                                Baby Care
-                              </SelectItem>
-                              <SelectItem value="Early Learning">
-                                Early Learning
-                              </SelectItem>
-                              <SelectItem value="Parenting Life">
-                                Parenting Life
-                              </SelectItem>
-                              <SelectItem value="Product Guides">
-                                Product Guides
-                              </SelectItem>
-                            </SelectContent>
-                          </Select>
-                        )}
-                      />
+                      {categoriesLoading ? (
+                        <p className="text-sm text-gray-500">
+                          Loading categories...
+                        </p>
+                      ) : (
+                        <Controller
+                          name="category"
+                          control={control}
+                          render={({ field }) => (
+                            <Select
+                              value={field.value || ""}
+                              onValueChange={field.onChange}
+                            >
+                              <SelectTrigger className="w-full !h-12 border-2 border-gray-200 rounded-md focus:border-blue-500 dark:border-gray-600 dark:bg-gray-800">
+                                <SelectValue placeholder="Select a category" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {Object.entries(categories).map(
+                                  ([key, category]) => (
+                                    <SelectItem key={key} value={category.name}>
+                                      {category.name}
+                                    </SelectItem>
+                                  ),
+                                )}
+                              </SelectContent>
+                            </Select>
+                          )}
+                        />
+                      )}
                     </div>
+
+                    {selectedCategory && (
+                      <div className="space-y-2">
+                        <Label
+                          htmlFor="subcategory"
+                          className="text-sm font-medium"
+                        >
+                          <ImageIcon className="h-4 w-4 inline mr-2" />{" "}
+                          Subcategory
+                        </Label>
+                        {getCurrentSubcategories().length > 0 ? (
+                          <Controller
+                            name="subcategory"
+                            control={control}
+                            render={({ field }) => (
+                              <Select
+                                value={field.value || ""}
+                                onValueChange={field.onChange}
+                              >
+                                <SelectTrigger className="w-full !h-12 border-2 border-gray-200 rounded-md focus:border-blue-500 dark:border-gray-600 dark:bg-gray-800">
+                                  <SelectValue placeholder="Select a subcategory" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {getCurrentSubcategories().map(
+                                    (subcategory) => (
+                                      <SelectItem
+                                        key={subcategory}
+                                        value={subcategory}
+                                      >
+                                        {subcategory
+                                          .split("-")
+                                          .map(
+                                            (word) =>
+                                              word.charAt(0).toUpperCase() +
+                                              word.slice(1),
+                                          )
+                                          .join(" ")}
+                                      </SelectItem>
+                                    ),
+                                  )}
+                                </SelectContent>
+                              </Select>
+                            )}
+                          />
+                        ) : (
+                          <p className="text-sm text-gray-500 py-2">
+                            No subcategories available for this category
+                          </p>
+                        )}
+                      </div>
+                    )}
+
                     {/* Slug */}
-                    <div className="space-y-2">
+                    <div
+                      className={`space-y-2 ${selectedCategory ? "md:col-span-1" : "md:col-span-2"}`}
+                    >
                       <Label
                         htmlFor="slug"
                         className="text-sm font-medium flex items-center gap-2"
@@ -555,60 +658,61 @@ export default function Blogs() {
                         className="h-12 text-base border-2 focus:border-blue-600 rounded-md px-3 w-full placeholder:text-sm"
                       />
                     </div>
-                    {/* Image upload */}
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium flex items-center gap-2">
-                        <Image className="h-4 w-4" /> Feature Image *
-                      </Label>
-                      <div>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          ref={fileInputRef}
-                          onChange={handleImageUpload}
-                          className="hidden"
-                        />
+                  </div>
 
-                        {!previewImage && (
+                  {/* Image upload */}
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium flex items-center gap-2">
+                      <ImageIcon className="h-4 w-4" /> Feature Image *
+                    </Label>
+                    <div>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        ref={fileInputRef}
+                        onChange={handleImageUpload}
+                        className="hidden"
+                      />
+
+                      {!previewImage && (
+                        <button
+                          type="button"
+                          className="w-full flex items-center justify-center gap-2 border border-gray-300 rounded-md px-3 py-3 hover:bg-gray-100 transition-colors"
+                          onClick={openFileDialog}
+                        >
+                          <ImageIcon className="h-4 w-4" /> Upload Image
+                        </button>
+                      )}
+
+                      {previewImage && (
+                        <div
+                          className="relative w-full h-96 rounded-md overflow-hidden cursor-pointer"
+                          onClick={openFileDialog}
+                        >
+                          <img
+                            src={previewImage || "/placeholder.svg"}
+                            alt="Preview"
+                            className="w-full h-full object-cover"
+                          />
                           <button
                             type="button"
-                            className="w-full flex items-center justify-center gap-2 border border-gray-300 rounded-md px-3 py-3 hover:bg-gray-100 transition-colors"
-                            onClick={openFileDialog}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removeImage();
+                            }}
+                            className="absolute top-2 right-2 bg-white rounded-full p-1 shadow hover:bg-gray-200 transition-colors"
                           >
-                            <Image className="h-4 w-4" /> Upload Image
+                            <X className="h-4 w-4 text-gray-700" />
                           </button>
-                        )}
-
-                        {previewImage && (
-                          <div
-                            className="relative w-full h-96 rounded-md overflow-hidden cursor-pointer"
-                            onClick={openFileDialog}
-                          >
-                            <img
-                              src={previewImage}
-                              alt="Preview"
-                              className="w-full h-full object-cover"
-                            />
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                removeImage();
-                              }}
-                              className="absolute top-2 right-2 bg-white rounded-full p-1 shadow hover:bg-gray-200 transition-colors"
-                            >
-                              <X className="h-4 w-4 text-gray-700" />
-                            </button>
-                          </div>
-                        )}
-                      </div>
+                        </div>
+                      )}
                     </div>
                   </div>
 
                   {/* Rich Text Editor */}
                   <div className="space-y-2 pt-6">
                     <Label className="text-sm font-medium">
-                      <Pencil className="h-4 w-4" /> blog Content *
+                      <ImageIcon className="h-4 w-4" /> blog Content *
                     </Label>
                     <Controller
                       name="content"
