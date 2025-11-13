@@ -332,7 +332,7 @@ export default function Blogs() {
                 <Eye className="h-4 w-4 mr-2" /> View News Page
               </Button>
             </Link>
-            <Link href="/admin/categories">
+            <Link href="/admin/dashboard/categories">
               <Button
                 size="sm"
                 variant="outline"

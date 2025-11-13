@@ -45,7 +45,7 @@ export function WebSiteNavbar() {
         </div>
 
         {/* Fully modern search bar */}
-        <div className="relative hidden lg:flex mx-10">
+        {/* <div className="relative hidden lg:flex mx-10">
           <div className="w-fit">
             <input
               type="text"
@@ -57,7 +57,7 @@ export function WebSiteNavbar() {
               className="absolute left-2 top-1/2 transform -translate-y-1/2 text-muted-foreground"
             />
           </div>
-        </div>
+        </div> */}
 
         {/* Desktop Auth Buttons */}
         {/* <div className="hidden lg:flex items-center gap-3">

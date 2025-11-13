@@ -3,6 +3,7 @@ import mongoose, { Schema, type Document } from "mongoose";
 export interface IBlogPost extends Document {
   title: string;
   category: string;
+  subcategory: string;
   image: string;
   author: string;
   primaryKeyword: string;
@@ -26,6 +27,11 @@ const BlogPostSchema: Schema = new Schema(
     category: {
       type: String,
       required: [true, "Please provide a category"],
+      trim: true,
+    },
+    subcategory: {
+      type: String,
+      required: [true, "Please provide a subcategory"],
       trim: true,
     },
     image: {
