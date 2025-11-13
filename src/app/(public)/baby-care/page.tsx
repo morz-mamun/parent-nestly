@@ -20,6 +20,7 @@ import { usePathname } from "next/navigation";
 
 export default function BabyCarePage() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [activeSubcategory, setActiveSubcategory] = useState<string>("all");
   const pathname = usePathname();
   // Split URL path (e.g., "/blogs/baby-care" → ["blogs", "baby-care"])
   const segments = pathname.split("/").filter((seg) => seg !== "");
@@ -31,23 +32,35 @@ export default function BabyCarePage() {
   });
   // ✅ Fetch only Baby Care blogs
   const { data: allBlogs, isLoading } = useBlogs("Baby Care");
-  console.log(allBlogs);
 
   // ✅ Filter only published blogs
   const allPublishedBlogs = allBlogs?.filter(
     (blog: TBlog) => blog.status === "published",
   );
 
-  // ✅ Search filter
+  const subcategories = useMemo(() => {
+    const unique = new Set(
+      allPublishedBlogs?.map((blog: TBlog) => blog.subcategory) || [],
+    );
+    return Array.from(unique) as string[];
+  }, [allPublishedBlogs]);
+
+  // ✅ Search and subcategory filter
   const filteredBlogs = useMemo(() => {
     return allPublishedBlogs?.filter((blog: TBlog) => {
+      const matchesSubcategory =
+        activeSubcategory === null ||
+        activeSubcategory === "all" ||
+        blog.subcategory === activeSubcategory;
+
       const matchesSearch =
         blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         blog.primaryKeyword.toLowerCase().includes(searchTerm.toLowerCase()) ||
         blog.author.toLowerCase().includes(searchTerm.toLowerCase());
-      return matchesSearch;
+
+      return matchesSubcategory && matchesSearch;
     });
-  }, [allPublishedBlogs, searchTerm]);
+  }, [allPublishedBlogs, searchTerm, activeSubcategory]);
 
   if (isLoading) return <Loading />;
 
@@ -58,7 +71,7 @@ export default function BabyCarePage() {
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-12">
-        {/* Search */}
+        {/* Search and Breadcrumbs */}
         <div className="flex justify-between items-center mb-8">
           <nav className="flex justify-center text-sm text-gray-600 dark:text-gray-300 mb-3 space-x-1">
             {/* Home link */}
@@ -98,15 +111,43 @@ export default function BabyCarePage() {
           </div>
         </div>
 
+        {subcategories.length > 0 && (
+          <div className="mb-8 flex gap-2 overflow-x-auto pb-2">
+            <button
+              onClick={() => setActiveSubcategory("all")}
+              className={`px-4 py-2 rounded-lg whitespace-nowrap font-medium transition-all ${
+                activeSubcategory === "all"
+                  ? "bg-primary text-primary-foreground shadow-md"
+                  : "bg-secondary/50 text-foreground hover:bg-secondary"
+              }`}
+            >
+              All
+            </button>
+            {subcategories.map((subcategory: string) => (
+              <button
+                key={subcategory}
+                onClick={() => setActiveSubcategory(subcategory)}
+                className={`px-4 py-2 rounded-lg whitespace-nowrap font-medium transition-all ${
+                  activeSubcategory === subcategory
+                    ? "bg-primary text-primary-foreground shadow-md"
+                    : "bg-secondary/50 text-foreground hover:bg-secondary"
+                }`}
+              >
+                {subcategory}
+              </button>
+            ))}
+          </div>
+        )}
+
         {/* Blog Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredBlogs?.map((blog: TBlog) => (
             <Link key={blog?._id} href={`/baby-care/${blog?.slug}`}>
               <Card className="h-full hover:shadow-lg transition-shadow cursor-pointer p-0">
                 <CardHeader className="p-0">
-                  <div className="w-full h-48 overflow-hidden">
+                  <div className="w-full h-40 overflow-hidden">
                     <img
-                      src={blog?.image}
+                      src={blog?.image || "/placeholder.svg"}
                       alt={blog?.title}
                       className="w-full h-full object-cover rounded-t-md"
                     />
@@ -116,7 +157,7 @@ export default function BabyCarePage() {
                 <CardContent className="flex flex-col justify-end h-full pt-0 pb-3 px-3 space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="rounded-md px-2 bg-secondary/10">
-                      <span className="text-sm">{blog?.primaryKeyword}</span>
+                      <span className="text-sm">{blog?.category}</span>
                     </div>
                   </div>
                   <CardTitle className="line-clamp-2">{blog?.title}</CardTitle>

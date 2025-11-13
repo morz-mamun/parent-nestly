@@ -17,10 +17,20 @@ import Link from "next/link";
 import Loading from "@/components/shared/loading";
 import Banner from "@/components/shared/banner";
 import { blogBannerData } from "@/constants/banner/blog-banner-data";
+import { usePathname } from "next/navigation";
 
 export default function BlogsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState<string>("all"); // ✅ explicitly string
+  const pathname = usePathname();
+  // Split URL path (e.g., "/blogs/baby-care" → ["blogs", "baby-care"])
+  const segments = pathname.split("/").filter((seg) => seg !== "");
+
+  // Build breadcrumb list
+  const breadcrumbs = segments.map((seg, index) => {
+    const href = "/" + segments.slice(0, index + 1).join("/");
+    return { label: decodeURIComponent(seg), href };
+  });
 
   const { data: allBlogs, isLoading } = useBlogs();
 
@@ -60,7 +70,33 @@ export default function BlogsPage() {
       <Banner data={blogBannerData} />
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-4 py-5">
+        <nav className="flex text-sm text-gray-600 dark:text-gray-300 mb-3 space-x-1">
+          {/* Home link */}
+          <Link
+            href="/"
+            className="font-medium hover:text-primary transition-colors"
+          >
+            Home
+          </Link>
+          {breadcrumbs.map((item, index) => (
+            <span key={index} className="flex items-center">
+              <span className="mx-1 text-gray-400">/</span>
+              {index === breadcrumbs.length - 1 ? (
+                <span className="font-bold text-gray-800 dark:text-gray-200 capitalize">
+                  {item.label.replace(/-/g, " ")}
+                </span>
+              ) : (
+                <Link
+                  href={item.href}
+                  className="hover:text-primary transition-colors capitalize"
+                >
+                  {item.label.replace(/-/g, " ")}
+                </Link>
+              )}
+            </span>
+          ))}
+        </nav>
         {/* Category Tabs */}
         <Tabs
           value={activeTab}
