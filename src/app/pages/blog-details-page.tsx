@@ -5,6 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Calendar, Clock, Share2, User } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { toast } from "sonner";
 
 export default function BlogDetailsPage({
@@ -14,6 +15,11 @@ export default function BlogDetailsPage({
   id?: string;
   slug?: string;
 }) {
+  const pathname = usePathname();
+  const segments = pathname.split("/").filter(Boolean);
+  const parentPath = segments[0] || "blogs"; // fallback if none found
+  const parentLabel = parentPath.replace("-", " "); // optional for better label text
+
   const { data: blog, isLoading } = useQuery({
     queryKey: ["blog", id || slug],
     queryFn: async () => {
@@ -48,7 +54,7 @@ export default function BlogDetailsPage({
           <p className="text-gray-600 mb-4">
             The blog you&apos;re looking for doesn&apos;t exist.
           </p>
-          <Link href="/blogs">
+          <Link href={`/${parentPath}`}>
             <Button>Back to Blogs</Button>
           </Link>
         </Card>
@@ -61,7 +67,7 @@ export default function BlogDetailsPage({
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="flex items-center justify-between mb-8">
-          <Link href="/blogs">
+          <Link href={`/${parentPath}`}>
             <Button variant="outline" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Blogs

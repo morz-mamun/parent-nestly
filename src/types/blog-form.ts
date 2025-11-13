@@ -10,4 +10,5 @@ export type FormValues = {
   status: "draft" | "published";
   publishDate: string;
   category: string;
+  subcategory?: string;
 };
