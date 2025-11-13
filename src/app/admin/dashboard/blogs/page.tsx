@@ -771,67 +771,82 @@ export default function Blogs() {
             </div>
           </div>
 
-          <div className="grid gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
             {filteredBlogs?.map((blog: any) => (
               <Card
                 key={blog._id}
-                className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm"
+                className="p-0 group border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-secondary/10 dark:bg-gray-900/80 backdrop-blur-sm rounded-xl overflow-hidden"
               >
-                <CardContent className="p-6">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-3">
-                        <h3 className="text-lg font-semibold">{blog.title}</h3>
-                        <Badge
-                          variant={
-                            blog.status === "published"
-                              ? "default"
-                              : "secondary"
-                          }
-                          className={`shadow-sm ${
-                            blog.status === "published"
-                              ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                              : "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200"
-                          }`}
-                        >
-                          {blog.status}
-                        </Badge>
-                        <Badge variant="outline" className="text-xs">
-                          {blog.primaryKeyword}
-                        </Badge>
-                      </div>
-                      <p className="text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
-                        {blog.excerpt}
-                      </p>
-                      <div className="flex items-center gap-4 text-sm text-gray-500">
-                        <div className="flex items-center gap-1">
-                          <User className="h-3 w-3" /> {blog.author}
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Calendar className="h-3 w-3" />
-                          {new Date(blog.publishDate).toLocaleDateString()}
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Eye className="h-3 w-3" /> {blog.views || 0} views
-                        </div>
-                      </div>
-                    </div>
+                {/* Blog Image */}
+                <div className="relative w-full h-40 overflow-hidden">
+                  <img
+                    src={blog.image || "/placeholder.jpg"}
+                    alt={blog.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
 
-                    <div className="flex flex-col gap-2">
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => handleEdit(blog)}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => handleDelete(blog._id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                  {/* Top Badges */}
+                  <div className="absolute top-3 left-3 flex gap-2">
+                    <Badge
+                      variant={
+                        blog.status === "published" ? "default" : "secondary"
+                      }
+                      className={`shadow-sm ${
+                        blog.status === "published"
+                          ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                          : "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200"
+                      }`}
+                    >
+                      {blog.status}
+                    </Badge>
+
+                    <Badge
+                      variant="outline"
+                      className="text-xs backdrop-blur-sm bg-primary text-white border-primary/20 shadow-sm"
+                    >
+                      {blog.category}
+                    </Badge>
+                  </div>
+                  {/* Edit/Delete Like Badges */}
+                  <div className="absolute top-3 right-3 flex gap-2">
+                    <button
+                      onClick={() => handleEdit(blog)}
+                      className="cursor-pointer flex items-center gap-1 text-xs bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 px-2 py-1 rounded-md hover:bg-blue-200 dark:hover:bg-blue-800 transition-all duration-200"
+                    >
+                      <Edit className="h-4 w-4" />
+                    </button>
+
+                    <button
+                      onClick={() => handleDelete(blog._id)}
+                      className="cursor-pointer flex items-center gap-1 text-xs bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200 px-2 py-1 rounded-md hover:bg-red-200 dark:hover:bg-red-800 transition-all duration-200"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Card Content */}
+                <CardContent className="px-3 pb-4">
+                  <h3 className="text-lg font-semibold mb-2 line-clamp-1">
+                    {blog.title}
+                  </h3>
+
+                  {blog.excerpt && (
+                    <p className="text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2">
+                      {blog.excerpt}
+                    </p>
+                  )}
+
+                  <div className="flex flex-wrap items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+                    <div className="flex items-center gap-1">
+                      <User className="h-3 w-3" /> {blog.author}
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Calendar className="h-3 w-3" />
+                      {new Date(blog.publishDate).toLocaleDateString()}
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Eye className="h-3 w-3" /> {blog.views || 0} views
                     </div>
                   </div>
                 </CardContent>
