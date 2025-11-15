@@ -12,4 +12,8 @@ export type TBlog = {
   publishDate: string;
   category: string;
   subcategory?: string;
+  readTime?: string;
+  views?: number;
+  comments?: number;
+  likes?: number;
 };
