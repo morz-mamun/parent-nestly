@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
 const featuredArticles = [
   {
@@ -97,25 +98,27 @@ export function HomeBanner() {
               </div>
 
               <h1 className="text-3xl lg:text-6xl font-bold leading-tight">
-                <span className="text-foreground">Discover Ideas That</span>{" "}
-                <span className="text-primary">Inspire</span>
+                <span className="text-foreground">Parenting Made Simpler,</span>{" "}
+                <span className="text-primary">Smarter and Kinder.</span>
               </h1>
 
-              <p className="text-xl text-muted-foreground leading-relaxed max-w-lg">
-                Explore thought-provoking articles, expert insights, and
-                creative perspectives that shape the future of innovation and
-                design.
+              <p className="text-xl text-muted-foreground leading-relaxed max-w-xl">
+                Discover parenting tips, expert-backed guides, and trusted
+                product reviews, all thoughtfully curated by ParentNestly to
+                support today&apos;s moms, dads, and caregivers.
               </p>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="group">
-                Start Reading
-                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Button>
-              <Button variant="outline" size="lg">
+              <Link href="/blog">
+                <Button size="lg" className="group">
+                  Start Reading
+                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+              {/* <Button variant="outline" size="lg">
                 Browse Categories
-              </Button>
+              </Button> */}
             </div>
 
             {/* Stats */}
@@ -203,10 +206,12 @@ export function HomeBanner() {
                       <span>{featuredArticles[currentArticle].likes}</span>
                       <span>{featuredArticles[currentArticle].comments}</span>
                     </div>
-                    <Button variant="ghost" size="sm">
-                      Read More
-                      <ArrowRight className="ml-1 w-3 h-3" />
-                    </Button>
+                    <Link href="/blog">
+                      <Button variant="ghost" size="sm">
+                        Read More
+                        <ArrowRight className="ml-1 w-3 h-3" />
+                      </Button>
+                    </Link>
                   </div>
                 </motion.div>
               </AnimatePresence>
