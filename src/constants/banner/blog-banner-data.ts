@@ -13,3 +13,9 @@ export const babyCareBannerData: TBanner = {
   description:
     "Explore expert tips and advice on nurturing your little one with our comprehensive baby care resources.",
 };
+
+export const earlyLearningBannerData: TBanner = {
+  title: "Early Learning",
+  description:
+    "Discover expert insights and tips on fostering your child's early learning and development.",
+};

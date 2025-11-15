@@ -18,7 +18,6 @@ export default function BlogDetailsPage({
   const pathname = usePathname();
   const segments = pathname.split("/").filter(Boolean);
   const parentPath = segments[0] || "blogs"; // fallback if none found
-  const parentLabel = parentPath.replace("-", " "); // optional for better label text
 
   const { data: blog, isLoading } = useQuery({
     queryKey: ["blog", id || slug],

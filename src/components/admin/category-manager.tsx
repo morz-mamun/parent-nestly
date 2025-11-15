@@ -28,7 +28,6 @@ export function CategoryManager() {
   const [newCategoryName, setNewCategoryName] = useState("");
   const [newSubcategories, setNewSubcategories] = useState<string[]>([]);
   const [newSubcategoryInput, setNewSubcategoryInput] = useState("");
-  console.log(newSubcategoryInput);
 
   const [loading, setLoading] = useState(true);
 

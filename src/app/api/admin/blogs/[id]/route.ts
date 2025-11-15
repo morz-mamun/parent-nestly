@@ -80,7 +80,6 @@ export async function PATCH(
 
     const body = await request.json();
     const newData = body;
-    console.log("from single blog", body);
 
     const post = await BlogPost.findByIdAndUpdate(id, newData, {
       new: true,

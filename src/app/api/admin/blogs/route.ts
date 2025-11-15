@@ -45,7 +45,6 @@ export async function POST(request: NextRequest) {
       slug,
       publishDate,
     } = body;
-    console.log(body);
 
     if (!title || !content || !image) {
       return NextResponse.json(
