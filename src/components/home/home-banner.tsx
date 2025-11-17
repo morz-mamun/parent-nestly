@@ -8,69 +8,46 @@ import {
   TrendingUp,
   Users,
   BookOpen,
+  User,
+  Calendar,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-
-const featuredArticles = [
-  {
-    id: 1,
-    title: "The Future of Digital Storytelling",
-    description:
-      "Exploring how emerging technologies are reshaping the way we create, share, and experience stories in the digital age.",
-    readTime: "5 min read",
-    views: "2.4K views",
-    likes: "156 likes",
-    comments: "23 comments",
-    icon: BookOpen,
-  },
-  {
-    id: 2,
-    title: "AI-Powered Content Creation",
-    description:
-      "Discover how artificial intelligence is revolutionizing content creation and what it means for creators and businesses.",
-    readTime: "7 min read",
-    views: "3.1K views",
-    likes: "289 likes",
-    comments: "45 comments",
-    icon: TrendingUp,
-  },
-  {
-    id: 3,
-    title: "Building Sustainable Communities",
-    description:
-      "Learn the strategies and principles behind creating thriving, long-lasting online communities that engage and inspire.",
-    readTime: "6 min read",
-    views: "1.8K views",
-    likes: "124 likes",
-    comments: "31 comments",
-    icon: Users,
-  },
-];
+import { useBlogs } from "@/hooks/use-allBlogs";
+import { TBlog } from "@/types/blog";
 
 export function HomeBanner() {
   const [currentArticle, setCurrentArticle] = useState(0);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
 
+  const { data: allBlogs, isLoading } = useBlogs();
+
+  const allPublishedBlogs = allBlogs?.filter(
+    (blog: TBlog) => blog.status === "published",
+  );
+
   // Auto play effect
   useEffect(() => {
-    if (!isAutoPlay) return;
+    if (!isAutoPlay || !allPublishedBlogs?.length) return;
     const interval = setInterval(() => {
-      setCurrentArticle((prev) => (prev + 1) % featuredArticles.length);
+      setCurrentArticle((prev) => (prev + 1) % allPublishedBlogs.length);
     }, 4000);
     return () => clearInterval(interval);
-  }, [isAutoPlay]);
+  }, [isAutoPlay, allPublishedBlogs]);
 
-  // Next/Prev do not stop autoplay
   const nextArticle = () => {
-    setCurrentArticle((prev) => (prev + 1) % featuredArticles.length);
+    if (allPublishedBlogs)
+      setCurrentArticle((prev) => (prev + 1) % allPublishedBlogs.length);
   };
 
   const prevArticle = () => {
-    setCurrentArticle(
-      (prev) => (prev - 1 + featuredArticles.length) % featuredArticles.length,
-    );
+    if (allPublishedBlogs)
+      setCurrentArticle(
+        (prev) =>
+          (prev - 1 + (allPublishedBlogs?.length || 0)) %
+          allPublishedBlogs.length,
+      );
   };
 
   return (
@@ -94,7 +71,7 @@ export function HomeBanner() {
             <div className="space-y-6">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium">
                 <TrendingUp className="w-4 h-4" />
-                {"Trending insights & stories"}
+                Trending insights & stories
               </div>
 
               <h1 className="text-3xl lg:text-6xl font-bold leading-tight">
@@ -116,9 +93,6 @@ export function HomeBanner() {
                   <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              {/* <Button variant="outline" size="lg">
-                Browse Categories
-              </Button> */}
             </div>
 
             {/* Stats */}
@@ -166,60 +140,82 @@ export function HomeBanner() {
                 </Button>
               </div>
 
-              {/* Smooth Transition */}
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={featuredArticles[currentArticle].id}
-                  initial={{ opacity: 0, x: -100 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 100 }}
-                  transition={{ duration: 0.5 }}
-                  className="space-y-6"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center">
-                      {(() => {
-                        const Icon = featuredArticles[currentArticle].icon;
-                        return <Icon className="w-6 h-6 text-primary" />;
-                      })()}
-                    </div>
-                    <div>
-                      <div className="font-semibold">Featured Article</div>
-                      <div className="text-sm text-muted-foreground">
-                        {featuredArticles[currentArticle].readTime}
+              {/* Loader State */}
+              {isLoading || !allPublishedBlogs?.length ? (
+                <div className="animate-pulse space-y-4">
+                  <div className="h-4 bg-muted rounded w-1/3"></div>
+                  <div className="h-6 bg-muted rounded w-full"></div>
+                  <div className="h-6 bg-muted rounded w-4/5"></div>
+                  <div className="h-4 bg-muted rounded w-2/3"></div>
+                </div>
+              ) : (
+                // Smooth Transition
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={allPublishedBlogs[currentArticle]._id}
+                    initial={{ opacity: 0, x: -100 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 100 }}
+                    transition={{ duration: 0.5 }}
+                    className="space-y-6"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center">
+                        <BookOpen className="w-6 h-6 text-primary" />
+                      </div>
+                      <div>
+                        <div className="font-semibold">Featured Blog</div>
+                        <div className="text-sm text-muted-foreground">
+                          {allPublishedBlogs[currentArticle].readTime ||
+                            "5 min read"}
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="space-y-4">
-                    <h3 className="text-2xl font-bold">
-                      {featuredArticles[currentArticle].title}
-                    </h3>
-                    <p className="text-muted-foreground">
-                      {featuredArticles[currentArticle].description}
-                    </p>
-                  </div>
-
-                  <div className="flex items-center justify-between pt-4 border-t">
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                      <span>{featuredArticles[currentArticle].views}</span>
-                      <span>{featuredArticles[currentArticle].likes}</span>
-                      <span>{featuredArticles[currentArticle].comments}</span>
+                    <div className="space-y-8">
+                      <h3 className="text-2xl font-bold h-12">
+                        {allPublishedBlogs[currentArticle].title.slice(0, 80) +
+                          (allPublishedBlogs[currentArticle].title.length > 80
+                            ? " ..."
+                            : "")}
+                      </h3>
+                      <p className="text-muted-foreground h-12">
+                        {allPublishedBlogs[currentArticle].metaDescription ||
+                          "Explore this article for more insights..."}
+                      </p>
                     </div>
-                    <Link href="/blog">
-                      <Button variant="ghost" size="sm">
-                        Read More
-                        <ArrowRight className="ml-1 w-3 h-3" />
-                      </Button>
-                    </Link>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
+
+                    <div className="flex items-center justify-between pt-4 border-t">
+                      <div className="flex items-center justify-between text-sm text-gray-500 gap-4">
+                        <div className="flex items-center gap-1">
+                          <User className="h-3 w-3" />
+                          {allPublishedBlogs[currentArticle]?.author ||
+                            "Unknown"}
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Calendar className="h-3 w-3" />
+                          {new Date(
+                            allPublishedBlogs[currentArticle]?.publishDate,
+                          ).toLocaleDateString()}
+                        </div>
+                      </div>
+                      <Link
+                        href={`/${allPublishedBlogs[currentArticle].category.toLowerCase().split(" ").join("-")}/${allPublishedBlogs[currentArticle].slug}`}
+                      >
+                        <Button variant="ghost" size="sm">
+                          Read More
+                          <ArrowRight className="ml-1 w-3 h-3" />
+                        </Button>
+                      </Link>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+              )}
             </div>
 
             {/* Background Decorative Elements */}
-            <div className="absolute -z-10 top-8 right-8 w-32 h-32 bg-primary/10 rounded-full blur-2xl"></div>
-            <div className="absolute -z-10 bottom-8 left-8 w-24 h-24 bg-accent/10 rounded-full blur-2xl"></div>
+            <div className="absolute -z-10 top-8 right-8 w-32 h-32 bg-primary rounded-full blur-2xl"></div>
+            <div className="absolute -z-10 bottom-8 left-8 w-24 h-24 bg-accent rounded-full blur-2xl"></div>
           </div>
         </div>
       </div>

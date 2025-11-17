@@ -91,8 +91,7 @@ export default function ExploreOurCategory() {
                       {category.name}
                     </h3>
                     <p className="text-muted-foreground text-sm leading-relaxed capitalize">
-                      {category?.subcategories?.join(", ") ||
-                        "No subcategories available."}
+                      {category?.description || "No description available."}
                     </p>
                   </div>
 
