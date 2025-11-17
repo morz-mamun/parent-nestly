@@ -100,7 +100,7 @@ export default function BabyCarePage() {
           className="w-full"
         >
           {allBlogs?.length > 0 && (
-            <div className="flex items-center justify-between gap-4 mb-5">
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-4 mb-5">
               <TabsList className="inline-flex h-auto p-1.5 bg-primary/10 backdrop-blur overflow-x-auto">
                 <TabsTrigger
                   value="all"

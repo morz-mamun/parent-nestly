@@ -9,11 +9,11 @@ import type { TBlog } from "@/types/blog";
 import Link from "next/link";
 import Loading from "@/components/shared/loading";
 import Banner from "@/components/shared/banner";
-import { babyCareBannerData } from "@/constants/banner/blog-banner-data";
+import { productGuidesBannerData } from "@/constants/banner/blog-banner-data";
 import { usePathname } from "next/navigation";
 import BlogCard from "@/components/cards/blog-card";
 
-export default function BabyCarePage() {
+export default function ProductGuidesPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeSubcategory, setActiveSubcategory] = useState<string>("all");
   const pathname = usePathname();
@@ -63,7 +63,7 @@ export default function BabyCarePage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
       {/* Hero Section */}
-      <Banner data={babyCareBannerData} />
+      <Banner data={productGuidesBannerData} />
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-5">
@@ -101,7 +101,7 @@ export default function BabyCarePage() {
           className="w-full"
         >
           {allBlogs?.length > 0 && (
-            <div className="flex items-center justify-between gap-4 mb-5">
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-4 mb-5">
               <TabsList className="inline-flex h-auto p-1.5 bg-primary/10 backdrop-blur overflow-x-auto">
                 <TabsTrigger
                   value="all"

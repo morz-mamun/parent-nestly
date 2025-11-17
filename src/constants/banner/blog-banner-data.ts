@@ -19,3 +19,15 @@ export const earlyLearningBannerData: TBanner = {
   description:
     "Discover expert insights and tips on fostering your child's early learning and development.",
 };
+
+export const parentingLifeBannerData: TBanner = {
+  title: "Parenting Life",
+  description:
+    "Learn practical strategies and insights for a fulfilling parenting life with our expert parenting resources.",
+};
+
+export const productGuidesBannerData: TBanner = {
+  title: "Product Guides",
+  description:
+    "Find expert reviews and comprehensive guides to help you choose the best products for your family.",
+};

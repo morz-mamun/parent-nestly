@@ -84,15 +84,15 @@ export function WebSiteNavbar() {
             <PopoverContent
               align="end"
               sideOffset={20}
-              className="max-w-[375px] flex flex-col gap-6"
+              className="max-w-[375px] flex flex-col gap-0"
             >
               {/* Mobile Navigation Links */}
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-1">
                 {navItems.map((item) => (
                   <Link
                     key={item.name}
                     href={item.link}
-                    className="text-lg text-muted-foreground hover:text-foreground transition-colors duration-200 py-1"
+                    className={`${item.link === pathName && "text-primary"} text-lg text-muted-foreground hover:text-foreground transition-colors duration-200 py-1`}
                   >
                     {item.name}
                   </Link>
@@ -100,14 +100,14 @@ export function WebSiteNavbar() {
               </div>
 
               {/* Fully modern search bar */}
-              <div className="relative w-full">
+              {/* <div className="relative w-full">
                 <input
                   type="text"
                   placeholder="Search..."
                   className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition"
                 />
                 <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
-              </div>
+              </div> */}
               {/* Mobile Auth Buttons */}
               {/* <div className="flex flex-col gap-3 pt-4 border-t border-border">
                 <Button variant="outline" className="w-full bg-transparent">

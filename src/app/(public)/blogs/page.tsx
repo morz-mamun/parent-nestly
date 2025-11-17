@@ -15,8 +15,9 @@ import BlogCard from "@/components/cards/blog-card";
 
 export default function BlogsPage() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [activeTab, setActiveTab] = useState<string>("all"); // ✅ explicitly string
+  const [activeTab, setActiveTab] = useState<string>("all");
   const pathname = usePathname();
+
   // Split URL path (e.g., "/blogs/baby-care" → ["blogs", "baby-care"])
   const segments = pathname.split("/").filter((seg) => seg !== "");
 
@@ -32,7 +33,7 @@ export default function BlogsPage() {
     (blog: TBlog) => blog.status === "published",
   );
 
-  // ✅ Categories strictly typed as string[]
+  // Get unique categories
   const categories: string[] = useMemo(() => {
     const uniqueCategories = new Set<string>(
       allPublishedBlogs?.map((blog: TBlog) => blog?.category) || [],
@@ -65,8 +66,8 @@ export default function BlogsPage() {
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-5">
+        {/* Breadcrumbs */}
         <nav className="flex text-sm text-gray-600 dark:text-gray-300 mb-3 space-x-1">
-          {/* Home link */}
           <Link
             href="/"
             className="font-medium hover:text-primary transition-colors"
@@ -91,31 +92,37 @@ export default function BlogsPage() {
             </span>
           ))}
         </nav>
+
         {/* Category Tabs */}
         <Tabs
           value={activeTab}
-          onValueChange={(val: string) => setActiveTab(val)} // ✅ typed callback
+          onValueChange={(val: string) => setActiveTab(val)}
           className="w-full"
         >
-          <div className="flex items-center justify-between gap-4 mb-5">
-            <TabsList className="inline-flex h-auto p-1.5 bg-primary/10 backdrop-blur">
-              <TabsTrigger
-                value="all"
-                className="px-6 py-2 data-[state=active]:bg-background data-[state=active]:shadow-sm"
-              >
-                All Posts
-              </TabsTrigger>
-              {categories.map((category, index) => (
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-5">
+            {/* Tabs List with smooth scroll and hidden scrollbar */}
+            <div className="overflow-x-auto w-full md:w-auto scrollbar-hide scroll-smooth">
+              <TabsList className="inline-flex h-auto p-1.5 bg-primary/10 backdrop-blur min-w-max">
                 <TabsTrigger
-                  key={index}
-                  value={category}
+                  value="all"
                   className="px-6 py-2 data-[state=active]:bg-background data-[state=active]:shadow-sm"
                 >
-                  {category}
+                  All Posts
                 </TabsTrigger>
-              ))}
-            </TabsList>
-            <div className="w-[350px]">
+                {categories.map((category, index) => (
+                  <TabsTrigger
+                    key={index}
+                    value={category}
+                    className="px-6 py-2 data-[state=active]:bg-background data-[state=active]:shadow-sm"
+                  >
+                    {category}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </div>
+
+            {/* Search Input */}
+            <div className="w-full md:w-[350px]">
               <div className="relative">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-primary h-5 w-5" />
                 <Input
@@ -135,7 +142,9 @@ export default function BlogsPage() {
               {filteredBlogs?.map((blog: TBlog) => (
                 <Link
                   key={blog?._id}
-                  href={`/blogs/${blog?.category.toLowerCase().replace(/ /g, "-")}/${blog?.slug}`}
+                  href={`/blogs/${blog?.category
+                    .toLowerCase()
+                    .replace(/ /g, "-")}/${blog?.slug}`}
                 >
                   <BlogCard blog={blog} />
                 </Link>

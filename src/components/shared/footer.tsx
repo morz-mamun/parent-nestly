@@ -30,7 +30,7 @@ export default function Footer() {
             </p>
           </div>
           {/* quick links */}
-          <div className="flex flex-col space-y-3 lg:mx-auto">
+          <div className="flex flex-col space-y-3 mx-auto">
             <h4 className="font-inter text-lg font-semibold">Quick Links</h4>
 
             <div className="flex flex-col items-start space-y-2 text-sm">
@@ -103,7 +103,7 @@ export default function Footer() {
           </div>
 
           {/* newsletter */}
-          <NewsletterForm />
+          {/* <NewsletterForm /> */}
         </div>
         {/* back to top button for large screens */}
         <div className="absolute right-2 bottom-72 hidden lg:block">
@@ -119,7 +119,7 @@ export default function Footer() {
         <div className="flex items-center justify-center lg:hidden">
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="flex cursor-pointer items-center gap-2 rounded-2xl bg-gradient-to-b from-[#0908C3] to-[#0C34E9] px-4 py-4 text-white shadow-lg transition-colors hover:scale-105 hover:bg-gradient-to-b hover:from-[#000EAC] hover:to-[#00163C] dark:shadow-lg"
+            className="flex cursor-pointer items-center gap-2 rounded-2xl bg-primary px-4 py-4 text-white shadow-lg transition-colors hover:scale-105 hover:bg-gradient-to-b hover:from-[#000EAC] hover:to-[#00163C] dark:shadow-lg"
           >
             <ArrowUpFromLine size={24} className="animate-bounce text-white" />
             {/* Back to Top */}
