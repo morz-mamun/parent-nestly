@@ -12,7 +12,7 @@ export default function BlogCard({ blog }: { blog: TBlog }) {
   return (
     <Card className="h-full hover:shadow-lg transition-shadow cursor-pointer p-0">
       <CardHeader className="p-0">
-        <div className="w-full h-40 overflow-hidden">
+        <div className="w-full h-48 overflow-hidden">
           <img
             src={blog?.image || "/placeholder.svg"}
             alt={blog?.title}
@@ -22,9 +22,14 @@ export default function BlogCard({ blog }: { blog: TBlog }) {
       </CardHeader>
 
       <CardContent className="flex flex-col justify-end h-full pt-0 pb-3 px-3 space-y-3">
-        <div className="flex items-center justify-between">
-          <div className="rounded-md px-2 bg-secondary/10">
-            <span className="text-sm">{blog?.category}</span>
+        <div className="flex items-center justify-start gap-2">
+          <div className="rounded-md px-2 bg-primary/30">
+            <span className="text-sm font-medium">{blog?.category}</span>
+          </div>
+          <div className="rounded-md px-2 bg-secondary/30">
+            <span className="text-sm capitalize font-medium">
+              {blog?.subcategory?.split("-").join(" ")}
+            </span>
           </div>
         </div>
         <CardTitle className="h-10">{`${blog?.title.slice(0, 85) + (blog?.title.length > 80 ? "..." : "")}`}</CardTitle>
