@@ -23,7 +23,7 @@ export default function BlogCard({ blog }: { blog: TBlog }) {
 
       <CardContent className="flex flex-col justify-end h-full pt-0 pb-3 px-3 space-y-3">
         <div className="flex items-center justify-start gap-2">
-          <div className="rounded-md px-2 bg-primary/30">
+          <div className="rounded-md px-2 bg-primary text-white">
             <span className="text-sm font-medium">{blog?.category}</span>
           </div>
           <div className="rounded-md px-2 bg-secondary/30">

@@ -14,15 +14,6 @@ export default function LatestArticles() {
     (blog: TBlog) => blog.status === "published",
   );
 
-  // Dynamic category colors map
-  const categoryColors: Record<string, string> = {
-    "Baby Care": "bg-pink-500/10 text-pink-600",
-    "Parenting Life": "bg-blue-500/10 text-blue-600",
-    "Early Learning": "bg-green-500/10 text-green-600",
-    "Product Guides": "bg-yellow-500/10 text-yellow-600",
-    // Add based on your categories
-  };
-
   return (
     <section className="max-w-screen-2xl mx-auto px-4">
       <div className="space-y-12">
