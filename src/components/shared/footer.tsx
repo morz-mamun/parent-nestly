@@ -16,7 +16,7 @@ export default function Footer() {
 
   return (
     <footer className="relative max-w-screen mx-auto bg-secondary/5">
-      <div className="mx-auto max-w-screen-2xl">
+      <div className="mx-auto max-w-screen-2xl px-4">
         {/* footer content */}
         <div className="grid grid-cols-2 py-8 md:grid-cols-3 md:py-12 lg:grid-cols-4 border-b border-b-muted-foreground/10">
           {/* about us and contact us */}

@@ -3,7 +3,8 @@ import ExploreOurCategory from "@/components/home/explore-our-category";
 import HomeFAQ from "@/components/home/faq";
 import { HomeBanner } from "@/components/home/home-banner";
 import LatestArticles from "@/components/home/latest-articles";
-import TopProducts from "@/components/home/top-products";
+import ProductGuide from "@/components/home/product-guide";
+// import TopProducts from "@/components/home/top-products";
 import React from "react";
 
 export default function HomePage() {
@@ -12,7 +13,8 @@ export default function HomePage() {
       <HomeBanner />
       <ExploreOurCategory />
       <LatestArticles />
-      <TopProducts />
+      <ProductGuide />
+      {/* <TopProducts /> */}
       <AboutUs />
       <HomeFAQ />
     </main>
