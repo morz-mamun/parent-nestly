@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
   try {
     await connectDB();
 
-    const { name, subcategories } = await request.json();
+    const { name, description, subcategories } = await request.json();
 
     if (!name) {
       return NextResponse.json(
@@ -47,6 +47,7 @@ export async function POST(request: NextRequest) {
 
     const category = await Category.create({
       name,
+      description,
       slug,
       subcategories: subcategories || [],
     });

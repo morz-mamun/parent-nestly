@@ -11,7 +11,7 @@ export default function CategoriesPage() {
       {/* Header */}
       <header className="sticky top-16 z-10 w-full border-b border-border bg-card">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <Link href="/blogs">
+          <Link href="/admin/dashboard/blogs">
             <Button
               size="sm"
               variant="outline"

@@ -2,6 +2,7 @@ import mongoose, { Schema, type Document } from "mongoose";
 
 export interface ICategory extends Document {
   name: string;
+  description?: string;
   slug: string;
   subcategories: string[];
   createdAt: Date;
@@ -13,6 +14,10 @@ const CategorySchema: Schema = new Schema(
     name: {
       type: String,
       required: [true, "Please provide a category name"],
+      trim: true,
+    },
+    description: {
+      type: String,
       trim: true,
     },
     slug: {

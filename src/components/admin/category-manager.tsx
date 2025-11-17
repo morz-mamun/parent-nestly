@@ -15,10 +15,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import Loading from "../shared/loading";
 
 interface Category {
   _id: string;
   name: string;
+  description?: string;
   subcategories: string[];
 }
 
@@ -26,6 +28,7 @@ export function CategoryManager() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
+  const [newCategoryDescription, setNewCategoryDescription] = useState("");
   const [newSubcategories, setNewSubcategories] = useState<string[]>([]);
   const [newSubcategoryInput, setNewSubcategoryInput] = useState("");
 
@@ -40,7 +43,7 @@ export function CategoryManager() {
     try {
       const res = await fetch("/api/admin/categories");
       const data = await res.json();
-      setCategories(data.data || []);
+      setCategories(data?.data || []);
     } catch (error: any) {
       toast("Failed to load categories", { description: error.message });
     } finally {
@@ -61,6 +64,7 @@ export function CategoryManager() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: newCategoryName,
+          description: newCategoryDescription,
           subcategories: newSubcategories,
         }),
       });
@@ -68,6 +72,7 @@ export function CategoryManager() {
       if (res.ok) {
         toast("Category added successfully");
         setNewCategoryName("");
+        setNewCategoryDescription("");
         setNewSubcategories([]);
         setNewSubcategoryInput("");
         setIsOpen(false);
@@ -159,7 +164,7 @@ export function CategoryManager() {
     }
   };
 
-  if (loading) return <p>Loading categories...</p>;
+  if (loading) return <Loading text="Loading categories..." />;
 
   return (
     <div className="space-y-6">
@@ -185,6 +190,18 @@ export function CategoryManager() {
                   value={newCategoryName}
                   onChange={(e) => setNewCategoryName(e.target.value)}
                   placeholder="e.g., Baby Care"
+                  className="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                />
+              </div>
+              <div>
+                <Label htmlFor="category-description">
+                  Category Description
+                </Label>
+                <textarea
+                  id="category-description"
+                  value={newCategoryDescription}
+                  onChange={(e) => setNewCategoryDescription(e.target.value)}
+                  placeholder="e.g., Products and tips for baby care"
                   className="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                 />
               </div>
@@ -276,8 +293,8 @@ export function CategoryManager() {
       </div>
 
       {/* Category Cards */}
-      <div className="grid gap-4">
-        {categories.map((category) => (
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        {categories?.map((category) => (
           <Card key={category._id}>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>{category.name}</CardTitle>
@@ -292,19 +309,29 @@ export function CategoryManager() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
+                {/* category description */}
+                {category.description && (
+                  <p className="text-sm text-muted-foreground mb-4">
+                    {category.description}
+                  </p>
+                )}
+
+                {/* List of subcategories */}
                 <Label className="text-sm mb-2 block">Subcategories:</Label>
                 <div className="flex flex-wrap gap-2 mb-4">
                   {category.subcategories.map((subcategory) => (
                     <div
                       key={subcategory}
-                      className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full"
+                      className="flex items-center gap-2 bg-primary/20 font-medium px-3 py-1 rounded-full"
                     >
-                      <span className="text-sm">{subcategory}</span>
+                      <span className="text-sm capitalize">
+                        {subcategory.split("-").join(" ")}
+                      </span>
                       <button
                         onClick={() =>
                           handleRemoveSubcategory(category._id, subcategory)
                         }
-                        className="hover:text-red-600"
+                        className="hover:text-red-600 cursor-pointer"
                       >
                         <X className="h-3 w-3" />
                       </button>
