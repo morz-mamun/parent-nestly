@@ -15,6 +15,7 @@ import {
 } from "@/constants/banner/blog-banner-data";
 import { usePathname } from "next/navigation";
 import BlogCard from "@/components/cards/blog-card";
+import { EmailSubscription } from "@/components/shared/email-subscription";
 
 export default function ParentingLifePage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -162,6 +163,9 @@ export default function ParentingLifePage() {
             )}
           </TabsContent>
         </Tabs>
+
+        {/* Email Subscription */}
+        <EmailSubscription />
       </div>
     </div>
   );

@@ -12,6 +12,7 @@ import Banner from "@/components/shared/banner";
 import { earlyLearningBannerData } from "@/constants/banner/blog-banner-data";
 import { usePathname } from "next/navigation";
 import BlogCard from "@/components/cards/blog-card";
+import { EmailSubscription } from "@/components/shared/email-subscription";
 
 export default function EarlyLearningPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -159,6 +160,9 @@ export default function EarlyLearningPage() {
             )}
           </TabsContent>
         </Tabs>
+
+        {/* Email Subscription */}
+        <EmailSubscription />
       </div>
     </div>
   );
