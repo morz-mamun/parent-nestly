@@ -59,3 +59,57 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+export async function GET(request: NextRequest) {
+  try {
+    await connectDB();
+
+    const searchParams = request.nextUrl.searchParams;
+    const page = parseInt(searchParams.get("page") || "1", 10);
+    const limit = parseInt(searchParams.get("limit") || "10", 10);
+
+    const total = await Subscriber.countDocuments();
+    const totalPages = Math.ceil(total / limit);
+    const skip = (page - 1) * limit;
+
+    const subscribers = await Subscriber.find({})
+      .sort({ subscribedAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const formattedSubscribers = subscribers.map((sub) => ({
+      _id: sub._id.toString(),
+      email: sub.email,
+      subscribedAt: sub.createdAt ? sub.createdAt.toISOString() : null,
+      isActive: sub.isActive,
+    }));
+
+    return NextResponse.json({
+      subscribers: formattedSubscribers,
+      total,
+      page,
+      totalPages,
+    });
+  } catch (error) {
+    console.error("Error fetching subscribers:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to fetch subscribers" },
+      { status: 500 },
+    );
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    await connectDB();
+    const { id } = await request.json();
+    const deletedSubscriber = await Subscriber.findByIdAndDelete(id);
+    return NextResponse.json({ success: true, data: deletedSubscriber?.email });
+  } catch (error) {
+    console.error("Error deleting subscriber:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to delete subscriber" },
+      { status: 500 },
+    );
+  }
+}

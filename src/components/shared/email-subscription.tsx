@@ -18,7 +18,7 @@ export function EmailSubscription() {
 
   const onSubmit = async ({ email }: { email: string }) => {
     try {
-      const res = await fetch("/api/admin/subscribe", {
+      const res = await fetch("/api/admin/subscribers", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),

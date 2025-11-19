@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Blocks, Home, Settings } from "lucide-react";
+import {
+  Blocks,
+  ChartColumnStacked,
+  Home,
+  Settings,
+  Users,
+} from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -66,6 +72,7 @@ export function SideNavbar() {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              {/* Categories */}
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
@@ -74,8 +81,22 @@ export function SideNavbar() {
                 >
                   <Link href={"/admin/dashboard/categories"}>
                     {/* categories icon */}
-                    <Blocks className="h-4 w-4" />
+                    <ChartColumnStacked className="h-4 w-4" />
                     <span>Categories</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              {/* Subscribers */}
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={pathname === "/admin/dashboard/subscribers"}
+                  tooltip="Subscribers"
+                >
+                  <Link href={"/admin/dashboard/subscribers"}>
+                    {/* subscribers icon */}
+                    <Users className="h-4 w-4" />
+                    <span>Subscribers</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
