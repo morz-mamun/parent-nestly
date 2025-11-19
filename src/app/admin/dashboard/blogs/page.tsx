@@ -41,6 +41,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Loading from "@/components/shared/loading";
 
 interface Category {
   name: string;
@@ -213,9 +214,20 @@ export default function Blogs() {
 
   // Submit blog post function
   const onSubmit = async (data: FormValues) => {
-    if (!data.title || !data.image || !data.content) {
+    if (
+      !data.title ||
+      !data.image ||
+      !data.content ||
+      !data.category ||
+      !data.subcategory ||
+      !data.status ||
+      !data.primaryKeyword ||
+      !data.metaTitle ||
+      !data.metaDescription ||
+      !data.slug
+    ) {
       toast(
-        `${data.title ? "" : "Title"} ${data.image ? "" : "Image"} ${data.content ? "" : "Content"} is required`,
+        `${data.title ? "" : "Title"} ${data.image ? "" : "Image"} ${data.content ? "" : "Content"} ${data.category ? "" : "Category"} ${data.subcategory ? "" : "Subcategory"} ${data.status ? "" : "Status"} ${data.primaryKeyword ? "" : "Primary Keyword"} ${data.metaTitle ? "" : "Meta Title"} ${data.metaDescription ? "" : "Meta Description"} ${data.slug ? "" : "Slug"} is required`,
         {
           description: "Please fill in all required fields",
         },
@@ -314,7 +326,7 @@ export default function Blogs() {
     localStorage.removeItem(`blog-draft-${editingId || "new"}`);
   };
 
-  if (isLoading) return <p>Loading blogs...</p>; // show loading state
+  if (isLoading) return <Loading text="Loading..." />; // show loading state
   if (error) return <p>Failed to load blogs</p>; // show error state
 
   return (

@@ -46,9 +46,24 @@ export async function POST(request: NextRequest) {
       publishDate,
     } = body;
 
-    if (!title || !content || !image) {
+    if (
+      !title ||
+      !content ||
+      !image ||
+      !category ||
+      !subcategory ||
+      !status ||
+      !primaryKeyword ||
+      !metaTitle ||
+      !metaDescription ||
+      !slug
+    ) {
       return NextResponse.json(
-        { success: false, error: "Title, content, and image are required" },
+        {
+          success: false,
+          error:
+            "Title, content, image, category, subcategory, status, primaryKeyword, metaTitle, metaDescription, and slug are required",
+        },
         { status: 400 },
       );
     }
@@ -64,7 +79,7 @@ export async function POST(request: NextRequest) {
       primaryKeyword,
       metaTitle,
       metaDescription,
-      slug,
+      slug: slug.toLowerCase().replace(/\s+/g, "-"),
       publishDate,
     });
     return NextResponse.json({ success: true, data: post }, { status: 201 });
