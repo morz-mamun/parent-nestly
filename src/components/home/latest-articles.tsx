@@ -8,7 +8,7 @@ import Loading from "../shared/loading";
 import BlogCard from "../cards/blog-card";
 
 export default function LatestArticles() {
-  const { data: allBlogs, isLoading } = useBlogs();
+  const { data: allBlogs, isLoading } = useBlogs("Parenting Life");
 
   const allPublishedBlogs = allBlogs?.filter(
     (blog: TBlog) => blog.status === "published",
@@ -24,8 +24,8 @@ export default function LatestArticles() {
             Trending Now
           </div>
           <h2 className="text-4xl lg:text-5xl font-bold text-balance">
-            <span className="text-foreground">Latest</span>{" "}
-            <span className="text-primary">Blogs</span>
+            <span className="text-foreground">Parenting Life</span>{" "}
+            <span className="text-primary">Picks</span>
           </h2>
           <p className="max-w-2xl mx-auto text-lg text-muted-foreground text-pretty">
             Stay up-to-date with our latest parenting guides, expert product
@@ -40,7 +40,11 @@ export default function LatestArticles() {
         {/* Articles Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5">
           {allPublishedBlogs?.slice(0, 4).map((blog: TBlog) => (
-            <Link href={`/blogs/${blog.slug}`} key={blog._id} className="group">
+            <Link
+              href={`/parenting-life/${blog.slug}`}
+              key={blog._id}
+              className="group"
+            >
               <BlogCard blog={blog} />
             </Link>
           ))}
@@ -48,13 +52,13 @@ export default function LatestArticles() {
 
         {/* Footer CTA */}
         <div className="text-right">
-          <Link href="/blogs">
+          <Link href="/parenting-life">
             <Button
               size="lg"
               variant="outline"
               className="cursor-pointer group bg-transparent"
             >
-              View All Blogs
+              View All
               <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Button>
           </Link>

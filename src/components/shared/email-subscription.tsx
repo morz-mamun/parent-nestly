@@ -44,7 +44,7 @@ export function EmailSubscription() {
     }
   };
   return (
-    <section className="py-16 md:py-24 px-4 md:px-8">
+    <section className="py-16 md:py-24 px-4">
       <div className="max-w-5xl mx-auto">
         <div className="rounded-2xl overflow-hidden shadow-lg">
           <div className="grid md:grid-cols-2 gap-0">

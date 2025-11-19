@@ -59,18 +59,17 @@ export function WebSiteNavbar() {
           </div>
         </div> */}
 
-        {/* Desktop Auth Buttons */}
-        {/* <div className="hidden lg:flex items-center gap-3">
-          <Button
-            variant="ghost"
-            className="text-muted-foreground hover:text-foreground transition-colors duration-200"
-          >
-            Sign Up
-          </Button>
-          <Button className="shadow-sm hover:shadow-md transition-shadow duration-200">
-            Login
-          </Button>
-        </div> */}
+        {/* Desktop Contact us button */}
+        <div className="hidden lg:flex items-center gap-3">
+          <Link href="/contact-us">
+            <Button
+              variant="default"
+              className="font-medium hover:text-foreground transition-colors duration-200"
+            >
+              Contact Us
+            </Button>
+          </Link>
+        </div>
 
         {/* Mobile Menu (Popover) */}
         <div className="lg:hidden">
