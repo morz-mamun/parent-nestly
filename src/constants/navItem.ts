@@ -15,10 +15,10 @@ export const navItems = [
     name: "Product Guides",
     link: "/product-guides",
   },
-  {
-    name: "Blogs",
-    link: "/blogs",
-  },
+  // {
+  //   name: "Blogs",
+  //   link: "/blogs",
+  // },
   {
     name: "Tools",
     link: "/tools",
