@@ -12,7 +12,7 @@ export default function BlogCard({ blog }: { blog: TBlog }) {
   return (
     <Card className="h-full hover:shadow-lg transition-shadow cursor-pointer p-0">
       <CardHeader className="p-0">
-        <div className="w-full h-48 overflow-hidden">
+        <div className="w-full h-52 overflow-hidden">
           <img
             src={blog?.image || "/placeholder.svg"}
             alt={blog?.title}

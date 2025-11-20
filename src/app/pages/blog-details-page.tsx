@@ -1,42 +1,24 @@
 "use client";
 import { EmailSubscription } from "@/components/shared/email-subscription";
-import Loading from "@/components/shared/loading";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { useQuery } from "@tanstack/react-query";
+import { TBlog } from "@/types/blog";
 import { ArrowLeft, Calendar, Clock, Share2, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { toast } from "sonner";
 
-export default function BlogDetailsPage({
-  id,
-  slug,
-}: {
-  id?: string;
-  slug?: string;
-}) {
+export default function BlogDetailsPage({ blog }: { blog: TBlog }) {
   const pathname = usePathname();
   const segments = pathname.split("/").filter(Boolean);
   const parentPath = segments[0] || "blogs"; // fallback if none found
-
-  const { data: blog, isLoading } = useQuery({
-    queryKey: ["blog", id || slug],
-    queryFn: async () => {
-      const url = id ? `/api/admin/blogs/${id}` : `/api/admin/blogs/${slug}`;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error("Failed to fetch blog");
-      const result = await res.json();
-      return result?.data;
-    },
-  });
 
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
         title: blog?.title,
-        text: blog?.excerpt,
+        text: blog?.metaDescription || "Check out this blog!",
         url: window.location.href,
       });
     } else {
@@ -46,8 +28,6 @@ export default function BlogDetailsPage({
       });
     }
   };
-
-  if (isLoading) return <Loading text="Loading Blog..." />;
 
   return (
     <>
@@ -90,11 +70,11 @@ export default function BlogDetailsPage({
                   </div>
                 )}
 
-                <p className="text-xl text-gray-600 dark:text-gray-300 mb-6">
+                {/* <p className="text-xl text-gray-600 dark:text-gray-300 mb-6">
                   {blog?.excerpt}
-                </p>
+                </p> */}
 
-                <div className="flex items-center gap-6 text-sm text-gray-500">
+                <div className="flex items-center gap-6 text-sm text-gray-500 pt-5">
                   <div className="flex items-center gap-1">
                     <User className="h-4 w-4" />
                     <span>By {blog?.author || "Unknown"}</span>
